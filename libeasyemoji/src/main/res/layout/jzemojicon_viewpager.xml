@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013 Klamr. All rights reserved.
+  ~
+  ~ This software is the confidential and proprietary information of Klamr or one of its
+  ~ subsidiaries. You shall not disclose this confidential information and shall use it only in
+  ~ accordance with the terms of the license agreement or other applicable agreement you entered into
+  ~ with Klamr.
+  ~
+  ~ KLAMR MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF THE SOFTWARE, EITHER
+  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. KLAMR SHALL NOT BE LIABLE FOR ANY LOSSES
+  ~ OR DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THIS SOFTWARE OR
+  ~ ITS DERIVATIVES.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/emojis_pager_viewpager"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp">
+        <!-- 装静态点的容器 -->
+        <LinearLayout
+            android:id="@+id/guide_point_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <ImageView
+            android:id="@+id/guide_point_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_dot_selected" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
