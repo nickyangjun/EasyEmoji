@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import org.nicky.easyemoji.EasyInput.KeyboardManagerImpl;
+import org.nicky.libeasyemoji.EasyInput.KeyboardManagerImpl;
+
 
 public class ViewUtil {
 

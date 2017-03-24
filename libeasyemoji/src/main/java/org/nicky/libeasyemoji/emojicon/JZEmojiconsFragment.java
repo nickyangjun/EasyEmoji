@@ -24,19 +24,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.nicky.libeasyemoji.R;
+import org.nicky.libeasyemoji.emojicon.emoji.Emojicon;
 import org.nicky.libeasyemoji.emojicon.emoji.People;
 
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com).
  */
-public class JZEmojiconsFragment extends EmojiconsFragment {
+public class JZEmojiconsFragment extends EmojiconsFragment implements  EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener{
     private FragmentManager mFragmentManager;
     private JZEmojiconGridFragment mJZEmojiconGridFragment;
     private EmojiconGridFragment.OnEmojiconClickedListener mOnEmojiconClickedListener;
     private boolean mUseSystemDefault = false;
 
     private static final String USE_SYSTEM_DEFAULT_KEY = "useSystemDefaults";
+    EmojiconEditText mEmojiconEditText;
 
     public static JZEmojiconsFragment newInstance(boolean useSystemDefault) {
         JZEmojiconsFragment fragment = new JZEmojiconsFragment();
@@ -44,6 +46,10 @@ public class JZEmojiconsFragment extends EmojiconsFragment {
         bundle.putBoolean(USE_SYSTEM_DEFAULT_KEY, useSystemDefault);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public void setEmojiconEditText(EmojiconEditText emojiconEditText){
+        mEmojiconEditText = emojiconEditText;
     }
 
     public void setOnEmojiconBackspaceClickedListener(OnEmojiconBackspaceClickedListener listener) {
@@ -81,5 +87,15 @@ public class JZEmojiconsFragment extends EmojiconsFragment {
         } else {
             mUseSystemDefault = false;
         }
+    }
+
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        EmojiconsFragment.input(mEmojiconEditText,emojicon);
+    }
+
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+        EmojiconsFragment.backspace(mEmojiconEditText);
     }
 }

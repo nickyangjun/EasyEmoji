@@ -83,7 +83,8 @@ public class EasyInputManagerImpl implements EasyInputManager {
 
     @Override
     public void addDefaultEmoji(EmojiconEditText emojiconEditText) {
-        Fragment fragment = JZEmojiconsFragment.newInstance(false);
+        JZEmojiconsFragment fragment = JZEmojiconsFragment.newInstance(false);
+        fragment.setEmojiconEditText(emojiconEditText);
         mPanelContentManager.addContent("emojicon",fragment);
     }
 
