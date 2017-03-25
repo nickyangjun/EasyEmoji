@@ -50,7 +50,12 @@ public class EasyInputManagerImpl implements EasyInputManager {
 
     @Override
     public void openPanel() {
-        mPanelContentManager.openPanel();
+        openPanel(null);
+    }
+
+    @Override
+    public void openPanel(String tag) {
+        mPanelContentManager.openPanel(tag);
         if(mKeyboardManager.isKeyboardShowing()){
             mKeyboardManager.closeKeyboard((Activity) mContext);
         }
@@ -77,15 +82,15 @@ public class EasyInputManagerImpl implements EasyInputManager {
     }
 
     @Override
-    public void setPanelCurrentViewFromTag(String tag) {
-
+    public void addDefaultEmoji(String tag,EmojiconEditText emojiconEditText) {
+        JZEmojiconsFragment fragment = JZEmojiconsFragment.newInstance(false);
+        fragment.setEmojiconEditText(emojiconEditText);
+        mPanelContentManager.addContent(tag,fragment);
     }
 
     @Override
-    public void addDefaultEmoji(EmojiconEditText emojiconEditText) {
-        JZEmojiconsFragment fragment = JZEmojiconsFragment.newInstance(false);
-        fragment.setEmojiconEditText(emojiconEditText);
-        mPanelContentManager.addContent("emojicon",fragment);
+    public String getCurrentPanelDisplayTag() {
+        return mPanelContentManager.getCurrentPanelDisplayTag();
     }
 
     @Override

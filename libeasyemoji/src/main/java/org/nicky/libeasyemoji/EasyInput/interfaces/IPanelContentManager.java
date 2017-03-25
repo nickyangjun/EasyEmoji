@@ -6,6 +6,7 @@ package org.nicky.libeasyemoji.EasyInput.interfaces;
 
 public interface IPanelContentManager {
     void addContent(String tag, Object content);
-    void openPanel();
+    void openPanel(String tag);
     void closePanel();
+    String getCurrentPanelDisplayTag();
 }

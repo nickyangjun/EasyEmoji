@@ -14,12 +14,13 @@ public interface EasyInputManager {
     void openKeyboard(View view);
     void closeKeyboard(View view);
     void openPanel();
+    void openPanel(String tag);
     void closePanel();
     void addOnPanelListener(OnPanelListener listener);
     void addOnKeyboardIMEListener(OnKeyboardListener listener);
     void setTouchBlankAutoHideIME(boolean autoHideIME, int offsetPixel);
     void addFragmentToPanel(String tag, Fragment panelFragment);
     void addViewToPanel(String tag, View panelView);
-    void setPanelCurrentViewFromTag(String tag);
-    void addDefaultEmoji(EmojiconEditText emojiconEditText);
+    void addDefaultEmoji(String tag,EmojiconEditText emojiconEditText);
+    String getCurrentPanelDisplayTag();
 }

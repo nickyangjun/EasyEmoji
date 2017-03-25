@@ -3,6 +3,8 @@ package org.nicky.libeasyemoji.EasyInput;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,34 +25,62 @@ public class PanelContentManager implements IPanelContentManager {
     IPanelLayout mIPanelLayout;
     private Map<String, View> viewMap = new HashMap<>();
     private Map<String, Fragment> fragmentMap = new HashMap<>();
-    private Object defaultContent;
+    private Object lastDisplayContent;
+    private Object currentDisplayContent;
+    private String currentContentTag;
     private boolean hasPanelContent;
     private Context mContext;
+    private FragmentManager fragmentManager;
 
-    private PanelContentManager(Context context,IPanelLayout iPanelLayout){
+    private PanelContentManager(Context context, IPanelLayout iPanelLayout) {
         mIPanelLayout = iPanelLayout;
         mContext = context;
     }
 
-    public static PanelContentManager newInstance(Context context,IPanelLayout iPanelLayout){
-        return new PanelContentManager(context,iPanelLayout);
+    public static PanelContentManager newInstance(Context context, IPanelLayout iPanelLayout) {
+        return new PanelContentManager(context, iPanelLayout);
     }
 
     @Override
     public void addContent(String tag, Object content) {
-        if(content instanceof View){
+        if (content instanceof View) {
             viewMap.put(tag, (View) content);
-        }else if(content instanceof Fragment){
+        } else if (content instanceof Fragment) {
             fragmentMap.put(tag, (Fragment) content);
-        }else {
+        } else {
             throw new RuntimeException("panel不支持显示此的类型");
         }
-        defaultContent = content;
+        currentContentTag = tag;
+        currentDisplayContent = content;
+    }
+
+
+    private void setPanelCurrentViewFromTag(String tag) {
+        if (TextUtils.isEmpty(tag)) {
+            return;
+        }
+        Object content;
+        if (viewMap.containsKey(tag)) {
+            content = viewMap.get(tag);
+        } else if (fragmentMap.containsKey(tag)) {
+            content = fragmentMap.get(tag);
+        } else {
+            throw new RuntimeException("no view or fragment add to panel, please invoke add first!");
+        }
+
+        if (content != currentDisplayContent) {
+            currentContentTag = tag;
+            currentDisplayContent = content;
+            hasPanelContent = false;
+        }
     }
 
     @Override
-    public void openPanel() {
-        if(addContentToPanel()){
+    public void openPanel(String tag) {
+        if (!TextUtils.isEmpty(tag)) {
+            setPanelCurrentViewFromTag(tag);
+        }
+        if (addContentToPanel()) {
             mIPanelLayout.openPanel();
         }
     }
@@ -60,32 +90,50 @@ public class PanelContentManager implements IPanelContentManager {
         mIPanelLayout.closePanel();
     }
 
-    private boolean addContentToPanel(){
-        if(hasPanelContent){ //panel already has content
+    @Override
+    public String getCurrentPanelDisplayTag() {
+        return currentContentTag;
+    }
+
+    private boolean addContentToPanel() {
+        if (hasPanelContent) { //panel already has content
             return true;
         }
-        if(mIPanelLayout.getPanel() == null){
-            return false;
+        if (mIPanelLayout.getPanel() == null || currentDisplayContent == null) {
+            return false; //will not display panel
         }
-        mIPanelLayout.getPanel().removeAllViews();
-        if(defaultContent !=null){
-            if(defaultContent instanceof View){
-                View content = (View) defaultContent;
-                if(content.getParent() != null){
-                    ViewGroup parent = (ViewGroup) content.getParent();
-                    parent.removeView(content);
-                }
-                mIPanelLayout.getPanel().addView((View) defaultContent);
-                hasPanelContent = true;
-            }else if(defaultContent instanceof Fragment){
-                Fragment content = (Fragment) defaultContent;
-                ((FragmentActivity)mContext).getSupportFragmentManager()
+        if (lastDisplayContent == currentDisplayContent) {
+            return true;
+        }
+        if (fragmentManager == null) {
+            fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+        }
+        if (lastDisplayContent instanceof Fragment) { //first hide last Fragment
+            fragmentManager.beginTransaction().hide((Fragment) lastDisplayContent).commitAllowingStateLoss();
+        }
+
+        if (currentDisplayContent instanceof View) {
+            mIPanelLayout.getPanel().removeAllViews();
+            View content = (View) currentDisplayContent;
+            if (content.getParent() != null) {
+                ViewGroup parent = (ViewGroup) content.getParent();
+                parent.removeView(content);
+            }
+            mIPanelLayout.getPanel().addView((View) currentDisplayContent);
+        } else if (currentDisplayContent instanceof Fragment) {
+            Fragment saved = fragmentManager.findFragmentByTag(currentContentTag);
+            if (saved != null) {
+                fragmentManager.beginTransaction().show(saved).commitAllowingStateLoss();
+            } else {
+                Fragment content = (Fragment) currentDisplayContent;
+                fragmentManager
                         .beginTransaction()
-                        .replace(R.id.panel_container,content)
-                        .commit();
-                hasPanelContent = true;
+                        .add(R.id.panel_container, content, currentContentTag)
+                        .commitAllowingStateLoss();
             }
         }
-        return hasPanelContent;
+        hasPanelContent = true;
+        lastDisplayContent = currentDisplayContent;
+        return true;
     }
 }

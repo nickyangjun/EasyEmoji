@@ -71,9 +71,9 @@ public class JZEmojiconsFragment extends EmojiconsFragment implements  EmojiconG
             mJZEmojiconGridFragment = JZEmojiconGridFragment.newInstance(People.DATA, null, mUseSystemDefault);
             mJZEmojiconGridFragment.setOnEmojiconClickedListener(mOnEmojiconClickedListener);
             mFragmentManager.beginTransaction()
-                    .add(R.id.emojis_pager, mJZEmojiconGridFragment, "JZEmojiconGridFragment").commit();
+                    .replace(R.id.emojis_pager, mJZEmojiconGridFragment, "JZEmojiconGridFragment").commitAllowingStateLoss();
         } else {
-            mFragmentManager.beginTransaction().show(f).commit();
+            mFragmentManager.beginTransaction().show(f).commitAllowingStateLoss();
         }
 
         return view;

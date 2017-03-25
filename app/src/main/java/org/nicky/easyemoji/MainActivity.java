@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
+import org.nicky.easyemoji.fragments.AttachFragment;
 import org.nicky.libeasyemoji.EasyInput.EasyInputManagerImpl;
 import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     Button closePanel;
     @BindView(R.id.open_panel)
     Button openPanel;
+    @BindView(R.id.attach)
+    ImageView attach;
 
 
 //    protected KeyboardEmojiManager mKeyboardEmojiManager;
@@ -49,17 +53,23 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager.addOnPanelListener(new changePanelListener());
         mEasyInputManager.addOnKeyboardIMEListener(new changeKeyboardListener());
         mEasyInputManager.setTouchBlankAutoHideIME(true,dip2px(this, 50));
-        mEasyInputManager.addDefaultEmoji(emojiconEditText);
-
+        mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
+        mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
     }
 
     @OnClick(R.id.emojicon_switch)
     void switchEmoji() {
         if (emojiSwitch.isChecked()) {
-            mEasyInputManager.openPanel();
+            mEasyInputManager.openPanel("emoji");
         } else {
             mEasyInputManager.openKeyboard(emojiconEditText);
         }
+    }
+
+    @OnClick(R.id.attach)
+    void attach(){
+        mEasyInputManager.openPanel("attach");
+        emojiSwitch.setChecked(false);
     }
 
     @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard})
@@ -83,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
     private class changePanelListener implements OnPanelListener {
         @Override
         public void onPanelDisplay(boolean isShowing) {
+            if(mEasyInputManager.getCurrentPanelDisplayTag().equals("attach")){
+                return;
+            }
             if(isShowing){
                 emojiSwitch.setChecked(true);
             }
