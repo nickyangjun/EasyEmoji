@@ -94,6 +94,11 @@ public class EasyInputManagerImpl implements EasyInputManager {
     }
 
     @Override
+    public boolean isKeyboardShowing() {
+        return mKeyboardManager.isKeyboardShowing();
+    }
+
+    @Override
     public void addOnKeyboardIMEListener(OnKeyboardListener listener) {
         mImeRootLayout.addOnKeyboardIMEListener(listener);
     }

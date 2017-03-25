@@ -23,4 +23,5 @@ public interface EasyInputManager {
     void addViewToPanel(String tag, View panelView);
     void addDefaultEmoji(String tag,EmojiconEditText emojiconEditText);
     String getCurrentPanelDisplayTag();
+    boolean isKeyboardShowing();
 }
