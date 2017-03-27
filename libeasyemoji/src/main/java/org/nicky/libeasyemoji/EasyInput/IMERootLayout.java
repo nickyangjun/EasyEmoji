@@ -122,7 +122,7 @@ class IMERootLayout extends RelativeLayout{
         if(!mAutoHideIME) {
             return super.dispatchTouchEvent(ev);
         }
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN && !super.dispatchTouchEvent(ev)) {
             if((ev.getRawY() < ConvertUtil.getWindowHeightPX(mContext) - KeyboardManagerImpl.getKeyboardHeight(mContext) - mAutoHideOffsetPixel)
                     &&(mPanelManager.isVisible() || mKeyboardManager.isKeyboardShowing())){
                 cancelIME();
