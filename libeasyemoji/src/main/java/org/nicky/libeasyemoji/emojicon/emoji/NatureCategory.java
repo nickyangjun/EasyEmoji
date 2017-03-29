@@ -34,9 +34,7 @@ public class NatureCategory extends EmojiCategory {
     @Override
     public BaseCategoryFragment<Emojicon> getFragment(PagerDataCategory category) {
         EmojiCategoryFragment fragment = new EmojiCategoryFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("data",category);
-        fragment.setArguments(args);
+        fragment.setArguments(category);
         return fragment;
     }
 

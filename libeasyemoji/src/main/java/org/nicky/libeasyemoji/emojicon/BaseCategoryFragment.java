@@ -21,4 +21,10 @@ public class BaseCategoryFragment<T extends Parcelable> extends Fragment{
         super.onCreate(savedInstanceState);
         mPagerDataCategory = getArguments().getParcelable("data");
     }
+
+    public final void setArguments(PagerDataCategory<T> category){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("data",category);
+        setArguments(bundle);
+    }
 }

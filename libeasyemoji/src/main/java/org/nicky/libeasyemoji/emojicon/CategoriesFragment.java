@@ -198,7 +198,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
             ICategoryDataWrapper wrapper = (ICategoryDataWrapper) mCategoryDateManger.categoryWrapperMap.get(position);
             String categoryName =  wrapper.getCategoryName();
             mViewPager.setCurrentItem(mCategoryDateManger.getPageCategoryIndex(categoryName),false);
-            initialPoints((ICategoryDataWrapper) mCategoryDateManger.categoryWrapperMap.get(position));
+            updatePointsCounts((ICategoryDataWrapper) mCategoryDateManger.categoryWrapperMap.get(position));
             setCategoryItemSelected(wrapper);
         }
     }
@@ -232,6 +232,13 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
             }
         }
         mCurSelectedCategoryWrapper = wrapper;
+        if (pointsCounts <= 1) {
+            mSelectedPoint.setVisibility(View.GONE);
+            mPointContainer.setVisibility(View.GONE);
+        } else {
+            mSelectedPoint.setVisibility(View.VISIBLE);
+            mPointContainer.setVisibility(View.VISIBLE);
+        }
         return pointsCounts;
     }
     /**
@@ -240,13 +247,6 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
     protected void initialPoints(ICategoryDataWrapper wrapper) {
         mSpace = 0;
         final int pointsCounts = updatePointsCounts(wrapper);
-        if (pointsCounts <= 1) {
-            mSelectedPoint.setVisibility(View.GONE);
-            mPointContainer.setVisibility(View.GONE);
-        } else {
-            mSelectedPoint.setVisibility(View.VISIBLE);
-            mPointContainer.setVisibility(View.VISIBLE);
-        }
         mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

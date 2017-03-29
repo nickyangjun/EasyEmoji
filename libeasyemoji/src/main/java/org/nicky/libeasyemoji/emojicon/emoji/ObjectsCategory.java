@@ -16,6 +16,7 @@ import java.util.List;
  */
 
 public class ObjectsCategory extends EmojiCategory {
+
     @Override
     public String getCategoryName() {
         return "objects";
