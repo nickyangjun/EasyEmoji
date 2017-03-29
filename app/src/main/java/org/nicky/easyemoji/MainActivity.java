@@ -14,6 +14,8 @@ import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnPanelListener;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
+import org.nicky.libeasyemoji.emojicon.emoji.ObjectsCategory;
+import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
     Button openPanel;
     @BindView(R.id.attach)
     ImageView attach;
-
-
-//    protected KeyboardEmojiManager mKeyboardEmojiManager;
+    @BindView(R.id.add_emoji)
+    Button addEmoji;
+    @BindView(R.id.delete_emoji)
+    Button deleteEmoji;
 
     protected EasyInputManager mEasyInputManager;
-
+    private BaseCategory category = new ObjectsCategory();
 
 
     @Override
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         emojiSwitch.setChecked(false);
     }
 
-    @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard})
+    @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji})
     void onClick(View view){
         switch (view.getId()){
             case R.id.open_keyboard:
@@ -86,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.close_panel:
                 mEasyInputManager.closePanel();
+                break;
+            case R.id.add_emoji:
+                mEasyInputManager.getEmojiBuilder().addEmojiCategory(category);
+                break;
+            case R.id.delete_emoji:
+                mEasyInputManager.getEmojiBuilder().deleteEmojiCategory(category.getCategoryName());
                 break;
         }
     }

@@ -3,6 +3,7 @@ package org.nicky.libeasyemoji.EasyInput.interfaces;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import org.nicky.libeasyemoji.EasyInput.EasyInputManagerImpl;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
 
 
@@ -22,6 +23,7 @@ public interface EasyInputManager {
     void addFragmentToPanel(String tag, Fragment panelFragment);
     void addViewToPanel(String tag, View panelView);
     void addDefaultEmoji(String tag,EmojiconEditText emojiconEditText);
+    EasyInputManagerImpl.Builder getEmojiBuilder();
     String getCurrentPanelDisplayTag();
     boolean isKeyboardShowing();
 }

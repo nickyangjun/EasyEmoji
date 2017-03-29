@@ -1,6 +1,7 @@
 package org.nicky.libeasyemoji.EasyInput;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.FrameLayout;

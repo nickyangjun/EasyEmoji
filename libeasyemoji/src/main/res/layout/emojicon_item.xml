@@ -19,7 +19,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:emojicon="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
     <org.nicky.libeasyemoji.emojicon.EmojiconTextView
             android:layout_gravity="center"
@@ -28,5 +29,12 @@
             android:layout_height="36dip"
             emojicon:emojiconSize="30dip"
             android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/emoji_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerInside"
+        android:visibility="gone"/>
 
 </FrameLayout>

@@ -2,7 +2,9 @@ package org.nicky.libeasyemoji.EasyInput;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 
 import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
@@ -11,8 +13,13 @@ import org.nicky.libeasyemoji.EasyInput.interfaces.IPanelContentManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.IPanelLayout;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnPanelListener;
+import org.nicky.libeasyemoji.emojicon.CategoriesFragment;
+import org.nicky.libeasyemoji.emojicon.CategoryDataManagerImpl;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
-import org.nicky.libeasyemoji.emojicon.JZEmojiconsFragment;
+import org.nicky.libeasyemoji.emojicon.emoji.NatureCategory;
+import org.nicky.libeasyemoji.emojicon.emoji.PeopleCategory;
+import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
+import org.nicky.libeasyemoji.emojicon.interfaces.CategoryDataManger;
 
 
 /**
@@ -25,6 +32,7 @@ public class EasyInputManagerImpl implements EasyInputManager {
     private IKeyboardManager mKeyboardManager;
     private IPanelLayout mIPanelLayout;
     private IPanelContentManager mPanelContentManager;
+    private volatile Builder mBuilder;
 
     private EasyInputManagerImpl(Activity activity){
         mContext = activity;
@@ -83,9 +91,22 @@ public class EasyInputManagerImpl implements EasyInputManager {
 
     @Override
     public void addDefaultEmoji(String tag,EmojiconEditText emojiconEditText) {
-        JZEmojiconsFragment fragment = JZEmojiconsFragment.newInstance(false);
-        fragment.setEmojiconEditText(emojiconEditText);
-        mPanelContentManager.addContent(tag,fragment);
+        getEmojiBuilder()
+                .setTag(tag)
+                .setEmojiconEditText(emojiconEditText)
+                .addEmojiCategory(new PeopleCategory())
+                .addEmojiCategory(new NatureCategory()).build();
+    }
+
+    public Builder getEmojiBuilder(){
+        if(mBuilder == null){
+            synchronized (this) {
+                if(mBuilder == null) {
+                    mBuilder = new Builder(mPanelContentManager);
+                }
+            }
+        }
+        return mBuilder;
     }
 
     @Override
@@ -106,5 +127,53 @@ public class EasyInputManagerImpl implements EasyInputManager {
     @Override
     public void addOnPanelListener(OnPanelListener listener) {
         mIPanelLayout.addOnPanelListener(listener);
+    }
+
+    public static class Builder<T extends Parcelable>{
+        CategoriesFragment fragment;
+        IPanelContentManager panelContentManager;
+        CategoryDataManger<T> manger;
+        EmojiconEditText text;
+        String tag;
+
+        public Builder(IPanelContentManager panelContentManager){
+            this.panelContentManager = panelContentManager;
+            manger = CategoryDataManagerImpl.newInstance();
+        }
+
+        public Builder setTag(String tag){
+            this.tag = tag;
+            return this;
+        }
+
+        public Builder setEmojiconEditText(EmojiconEditText emojiconEditText){
+            text = emojiconEditText;
+            return this;
+        }
+
+        public Builder addEmojiCategory(BaseCategory category){
+            manger.addCategory(category);
+            return this;
+        }
+
+        public Builder deleteEmojiCategory(String tag){
+            manger.deleteCategory(tag);
+            return this;
+        }
+
+        public void build(){
+            if(TextUtils.isEmpty(tag)){
+                throw new RuntimeException("please invoke setTag() method first to set panel tag !!!");
+            }
+            if(fragment != null){
+                throw new RuntimeException("don't need invoke build() method twice to the same Builder instance !!!");
+            }
+            fragment = CategoriesFragment.newInstance();
+            if(text != null) {
+                fragment.setEmojiconEditText(text);
+            }
+            fragment.setCategoryDataManager(manger);
+            panelContentManager.addContent(tag,fragment);
+        }
     }
 }

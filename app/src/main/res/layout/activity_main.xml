@@ -1,109 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context="org.nicky.easyemoji.MainActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/close_keyboard"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="关闭键盘" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/open_keyboard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="打开键盘" />
+            <Button
+                android:id="@+id/close_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="关闭键盘" />
 
-        <Button
-            android:id="@+id/close_panel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="关闭panel" />
+            <Button
+                android:id="@+id/open_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="打开键盘" />
 
-        <Button
-            android:id="@+id/open_panel"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="打开panel" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/close_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="关闭panel" />
+
+            <Button
+                android:id="@+id/open_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="打开panel" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="增加emoji" />
+
+            <Button
+                android:id="@+id/delete_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="删除emoji" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
 
     <RelativeLayout
         android:id="@+id/id_input_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@color/white"
+        android:gravity="center_vertical"
         android:minHeight="50dp"
+        android:orientation="horizontal"
         android:paddingBottom="2dp"
         android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/attach"
-            android:padding="5dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/chatting_plus_btn_icon"/>
+            android:padding="5dp"
+            android:src="@drawable/chatting_plus_btn_icon" />
 
-        <RelativeLayout
-            android:id="@+id/txt_area"
+
+        <org.nicky.libeasyemoji.emojicon.EmojiconEditText xmlns:Emojicon="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/emoji_input_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/attach"
+            android:layout_marginRight="90dp"
             android:layout_toRightOf="@id/attach"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="70dp">
-
-            <org.nicky.libeasyemoji.emojicon.EmojiconEditText xmlns:Emojicon="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/emoji_input_txt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/emojicon_switch"
-                android:background="@drawable/shape_input_text"
-                android:hint="说点什么吧~"
-                android:lineSpacingExtra="1dp"
-                android:maxLength="140"
-                android:maxLines="4"
-                android:minHeight="30dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColorHint="@color/hint_gray_999"
-                android:textSize="14sp"
-                Emojicon:emojiconSize="18sp" />
-
-            <CheckBox
-                android:id="@+id/emojicon_switch"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignBottom="@id/emoji_input_txt"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/emojicon_switch"
-                android:button="@null" />
-
-        </RelativeLayout>
-
+            android:background="@drawable/shape_input_text"
+            android:hint="说点什么吧~"
+            android:lineSpacingExtra="1dp"
+            android:maxLength="140"
+            android:maxLines="4"
+            android:minHeight="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hint_gray_999"
+            android:textSize="14sp"
+            Emojicon:emojiconSize="18sp" />
 
         <TextView
             android:id="@+id/publish"
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:layout_alignBottom="@id/txt_area"
+            android:layout_alignBaseline="@id/emoji_input_txt"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/shape_bg_round4"
@@ -111,7 +135,17 @@
             android:text="发送"
             android:textColor="@color/white"
             android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/emojicon_switch"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignBaseline="@id/emoji_input_txt"
+            android:layout_marginBottom="5dp"
+            android:layout_toLeftOf="@id/publish"
+            android:background="@drawable/emojicon_switch"
+            android:button="@null" />
     </RelativeLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
