@@ -62,7 +62,7 @@ public class EmojiCategoryFragment extends BaseCategoryFragment<Emojicon> {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             EmojiAdapter.Holder emojiHolder = (EmojiAdapter.Holder) holder;
             if(position == getItemCount() -1){
-                emojiHolder.image.setImageResource(R.drawable.sym_keyboard_delete_holo_dark);
+                emojiHolder.image.setImageResource(R.drawable.ic_smiles_backspace);
             }else {
                 Emojicon emojicon = mPagerDataCategory.getEmojiData().get(position);
                 emojiHolder.icon.setText(emojicon.getEmoji());

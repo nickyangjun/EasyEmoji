@@ -23,7 +23,7 @@ public class NatureCategory extends EmojiCategory {
 
     @Override
     public int getCategoryItemIcon() {
-        return R.drawable.ic_emoji_nature_light;
+        return R.drawable.ic_emoji_flower;
     }
 
     @Override

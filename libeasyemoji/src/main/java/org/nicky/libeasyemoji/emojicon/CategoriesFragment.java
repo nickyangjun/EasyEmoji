@@ -1,5 +1,6 @@
 package org.nicky.libeasyemoji.emojicon;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -157,6 +158,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
             ImageButton imageView = new ImageButton(getActivity());
             imageView.setLayoutParams(new ViewGroup.LayoutParams(EmojiUtil.dip2px(getActivity(),40),
                     ViewGroup.LayoutParams.MATCH_PARENT));
+            imageView.setBackgroundColor(Color.WHITE);
             return new Holder(imageView);
         }
 

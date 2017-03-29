@@ -25,7 +25,7 @@ public class PeopleCategory extends EmojiCategory {
 
     @Override
     public int getCategoryItemIcon() {
-        return R.drawable.ic_emoji_people_light;
+        return R.drawable.ic_emoji_smile;
     }
 
     @Override

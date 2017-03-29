@@ -3,6 +3,7 @@
     <!-- 透明 -->
     <color name="transparent">#00000000</color>
     <color name="redE11644">#e11644</color>
+    <color name="white">#fff</color>
 
     <color name="horizontal_divider">#8f8f8f</color>
     <color name="horizontal_vertical">#8f8f8f</color>
@@ -14,4 +15,6 @@
     <!-- 4.分割线 -->
     <color name="dividerCCCCCC">#cccccc</color>
     <color name="dividerDDDDDD">#dddddd</color>
+
+    <color name="blue">#367cde</color>
 </resources>

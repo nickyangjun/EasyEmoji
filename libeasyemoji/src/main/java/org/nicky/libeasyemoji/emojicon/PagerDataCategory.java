@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,10 +37,17 @@ public class PagerDataCategory<T extends Parcelable> implements Parcelable {
         row = in.readInt();
         String dataName = in.readString();
         if(!TextUtils.isEmpty(dataName)) {
-            try {
-                this.dataList = (List<T>) Arrays.asList(in.readParcelableArray(Class.forName(dataName).getClassLoader()));
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            if(this.dataList == null){
+                this.dataList = new ArrayList<>();
+            }
+            int size = in.readInt();
+            for(int i=0;i<size;i++) {
+                try {
+                    T t = in.readParcelable(Class.forName(dataName).getClassLoader());
+                    this.dataList.add(t);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -58,7 +65,10 @@ public class PagerDataCategory<T extends Parcelable> implements Parcelable {
         dest.writeInt(row);
         if(dataList.size()>0) {
             dest.writeString(dataList.get(0).getClass().getName());
-            dest.writeParcelableArray((Parcelable[]) dataList.toArray(),flags);
+            dest.writeInt(dataList.size());
+            for(T t : dataList) {
+                dest.writeParcelable(t,flags);
+            }
         }
     }
 

@@ -24,7 +24,7 @@ public class ObjectsCategory extends EmojiCategory {
 
     @Override
     public int getCategoryItemIcon() {
-        return R.drawable.ic_emoji_objects_light;
+        return R.drawable.ic_emoji_bell;
     }
 
     @Override
