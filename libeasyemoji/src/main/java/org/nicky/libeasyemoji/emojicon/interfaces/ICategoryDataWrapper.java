@@ -21,5 +21,6 @@ public interface ICategoryDataWrapper<T extends Parcelable> {
     boolean isSelected();
     void setSelected(boolean selected);
     BaseCategory<T> getBaseCategory();
+    void updatePagerCategoryList(BaseCategory<T> t);
     BaseCategoryFragment<T> getFragment(PagerDataCategory category);
 }

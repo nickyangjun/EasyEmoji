@@ -24,6 +24,16 @@ public class CategoryDataWrapper<T extends Parcelable> implements BaseCategory<T
     private List<PagerDataCategory<T>> pagerDataCategoryList;
 
     public CategoryDataWrapper(BaseCategory<T> category){
+        updatePagerCategoryList(category);
+    }
+
+    @Override
+    public BaseCategory<T> getBaseCategory() {
+        return baseCategory;
+    }
+
+    @Override
+    public void updatePagerCategoryList(BaseCategory<T> category){
         this.baseCategory = category;
         this.icon = category.getCategoryItemIcon();
         this.countsPerPage = category.getColumn()*category.getRow();
@@ -32,15 +42,7 @@ public class CategoryDataWrapper<T extends Parcelable> implements BaseCategory<T
         }
         this.categoryName = category.getCategoryName();
         this.dataList = category.getEmojiData();
-        updatePagerCategoryList();
-    }
 
-    @Override
-    public BaseCategory<T> getBaseCategory() {
-        return baseCategory;
-    }
-
-    private void updatePagerCategoryList(){
         if(pagerDataCategoryList == null){
             pagerDataCategoryList = new ArrayList<>(10);
         }else {

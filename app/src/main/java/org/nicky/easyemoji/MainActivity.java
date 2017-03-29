@@ -14,6 +14,7 @@ import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnPanelListener;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
+import org.nicky.libeasyemoji.emojicon.emoji.Emojicon;
 import org.nicky.libeasyemoji.emojicon.emoji.ObjectsCategory;
 import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
 
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     Button addEmoji;
     @BindView(R.id.delete_emoji)
     Button deleteEmoji;
+    @BindView(R.id.add_a_emoji)
+    Button addOneEmoji;
+    @BindView(R.id.delete_a_emoji)
+    Button deleteOneEmoji;
 
     protected EasyInputManager mEasyInputManager;
     private BaseCategory category = new ObjectsCategory();
@@ -75,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
         emojiSwitch.setChecked(false);
     }
 
-    @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji})
+    @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji,
+                R.id.delete_a_emoji,R.id.add_a_emoji})
     void onClick(View view){
         switch (view.getId()){
             case R.id.open_keyboard:
@@ -95,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.delete_emoji:
                 mEasyInputManager.getEmojiBuilder().deleteEmojiCategory(category.getCategoryName());
+                break;
+            case R.id.add_a_emoji:
+                category.getEmojiData().add(Emojicon.fromCodePoint(0x1f3e0));
+                mEasyInputManager.getEmojiBuilder().updateEmojiCategory(category);
+                break;
+            case R.id.delete_a_emoji:
+                category.getEmojiData().remove(category.getEmojiData().size()-1);
+                mEasyInputManager.getEmojiBuilder().updateEmojiCategory(category);
                 break;
         }
     }

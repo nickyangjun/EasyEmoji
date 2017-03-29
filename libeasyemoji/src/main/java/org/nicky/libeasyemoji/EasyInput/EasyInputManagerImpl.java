@@ -161,6 +161,11 @@ public class EasyInputManagerImpl implements EasyInputManager {
             return this;
         }
 
+        public Builder updateEmojiCategory(BaseCategory category){
+            manger.updateCategory(category);
+            return this;
+        }
+
         public void build(){
             if(TextUtils.isEmpty(tag)){
                 throw new RuntimeException("please invoke setTag() method first to set panel tag !!!");

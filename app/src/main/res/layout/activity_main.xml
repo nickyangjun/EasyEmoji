@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="增加emoji" />
+                android:text="增加一类emoji" />
 
             <Button
                 android:id="@+id/delete_emoji"
@@ -79,7 +79,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:text="删除emoji" />
+                android:text="删除一类emoji" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/add_a_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="增加一个emoji" />
+
+            <Button
+                android:id="@+id/delete_a_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="删除一个emoji" />
 
         </LinearLayout>
 

@@ -18,6 +18,12 @@ import java.util.List;
  */
 
 public class PeopleCategory extends EmojiCategory {
+
+    List<Emojicon> emojiconList;
+    public PeopleCategory(){
+        emojiconList = new ArrayList<>(Arrays.asList(Emojicon.getEmojicons(Emojicon.TYPE_PEOPLE)));
+    }
+
     @Override
     public String getCategoryName() {
         return "people";
@@ -30,7 +36,7 @@ public class PeopleCategory extends EmojiCategory {
 
     @Override
     public List<Emojicon> getEmojiData() {
-        return Arrays.asList(Emojicon.getEmojicons(Emojicon.TYPE_PEOPLE));
+        return emojiconList;
     }
 
     @Override

@@ -102,6 +102,25 @@ public class CategoryDataManagerImpl<T extends Parcelable> implements CategoryDa
         }
     }
 
+    public  void addCategory(int position, BaseCategory category) {
+        if(TextUtils.isEmpty(category.getCategoryName())){
+            throw new RuntimeException("the category's categoryName can not null");
+        }
+        if(categoryWrapperMap.containsKey(category.getCategoryName())){
+            return;
+        }
+        ICategoryDataWrapper<T> wrapper = new CategoryDataWrapper<>(category);
+        categoryWrapperMap.add(position,category.getCategoryName(),wrapper);
+        int pagerCounts = 0;
+        for(int i=0;i<position;i++){
+            pagerCounts += categoryWrapperMap.get(i).getPagerCounts();
+        }
+        categoryPagerList.addAll(pagerCounts,wrapper.getPagerDataCategory());
+        if(categoryChangeListener != null){
+            categoryChangeListener.update(CategoryDataChangeListener.TYPE.ADD,category);
+        }
+    }
+
     @Override
     public void deleteCategory(String categoryName) {
         ICategoryDataWrapper<T> wrapper = (ICategoryDataWrapper<T>) categoryWrapperMap.get(categoryName);
@@ -111,6 +130,21 @@ public class CategoryDataManagerImpl<T extends Parcelable> implements CategoryDa
             if(categoryChangeListener != null){
                 categoryChangeListener.update(CategoryDataChangeListener.TYPE.DELETE,wrapper.getBaseCategory());
             }
+        }
+    }
+
+    @Override
+    public void updateCategory(BaseCategory category) {
+        if(categoryWrapperMap.containsKey(category.getCategoryName())){
+            if(category.getEmojiData().size() == 0){
+                deleteCategory(category.getCategoryName());
+                return;
+            }
+            int index = categoryWrapperMap.indexOf(category.getCategoryName());
+            deleteCategory(category.getCategoryName());
+            addCategory(index,category);
+        }else {
+            addCategory(category);
         }
     }
 

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +106,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        update(type,category);
+                        updateCategoryEmoji(type,category);
                     }
                 });
             }
@@ -268,6 +269,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                 // 1. 去对滑动的点做操作
                 // 2. 设置marginLeft
                 RelativeLayout.LayoutParams params =
@@ -283,11 +285,11 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
                         positionOffset + 0.5f);// 四舍五入
 
                 mSelectedPoint.setLayoutParams(params);
+                Log.e("nick","onPageScrolled----> "+pointsCounts +" wrapper index: "+index+" name: "+ mCurSelectedCategoryWrapper.getCategoryName());
             }
 
             @Override
             public void onPageSelected(int position) {
-
             }
 
             @Override

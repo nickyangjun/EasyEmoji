@@ -9,4 +9,5 @@ import android.os.Parcelable;
 public interface CategoryDataManger<T extends Parcelable>{
     void addCategory(BaseCategory<T> category);
     void deleteCategory(String categoryName);
+    void updateCategory(BaseCategory<T> category);
 }

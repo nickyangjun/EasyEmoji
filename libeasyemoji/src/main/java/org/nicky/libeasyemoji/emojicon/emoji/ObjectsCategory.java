@@ -8,6 +8,7 @@ import org.nicky.libeasyemoji.emojicon.EmojiCategoryFragment;
 import org.nicky.libeasyemoji.emojicon.PagerDataCategory;
 import org.nicky.libeasyemoji.emojicon.interfaces.EmojiCategory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +17,11 @@ import java.util.List;
  */
 
 public class ObjectsCategory extends EmojiCategory {
+
+    List<Emojicon> emojiconList;
+    public ObjectsCategory(){
+        emojiconList = new ArrayList<>(Arrays.asList(Emojicon.getEmojicons(Emojicon.TYPE_OBJECTS)));
+    }
 
     @Override
     public String getCategoryName() {
@@ -29,7 +35,7 @@ public class ObjectsCategory extends EmojiCategory {
 
     @Override
     public List<Emojicon> getEmojiData() {
-        return Arrays.asList(Emojicon.getEmojicons(Emojicon.TYPE_OBJECTS));
+        return emojiconList;
     }
 
     @Override
