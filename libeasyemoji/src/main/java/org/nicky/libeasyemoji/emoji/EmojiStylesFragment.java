@@ -1,8 +1,7 @@
-package org.nicky.libeasyemoji.emojicon;
+package org.nicky.libeasyemoji.emoji;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,13 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.nicky.libeasyemoji.R;
+import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
+import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyleChangeListener;
+import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
+import org.nicky.libeasyemoji.emojicon.EmojiconFragment;
 import org.nicky.libeasyemoji.emojicon.emoji.Emojicon;
-import org.nicky.libeasyemoji.emojicon.emoji.NatureCategory;
-import org.nicky.libeasyemoji.emojicon.emoji.PeopleCategory;
-import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
-import org.nicky.libeasyemoji.emojicon.interfaces.CategoryDataChangeListener;
-import org.nicky.libeasyemoji.emojicon.interfaces.CategoryDataManger;
-import org.nicky.libeasyemoji.emojicon.interfaces.ICategoryDataWrapper;
 import org.nicky.libeasyemoji.emojicon.interfaces.OnItemClickListener;
 import org.nicky.libeasyemoji.emojicon.utils.EmojiUtil;
 
@@ -34,23 +31,24 @@ import org.nicky.libeasyemoji.emojicon.utils.EmojiUtil;
  * Created by nickyang on 2017/3/28.
  */
 
-public class CategoriesFragment extends Fragment implements EmojiCategoryFragment.OnEmojiconClickedListener {
+public class EmojiStylesFragment extends Fragment implements EmojiconFragment.OnEmojiconClickedListener {
 
     private FragmentManager mFragmentManager;
     private ViewPager mViewPager;
-    private RecyclerView mCategoryItem;
-    private CategoryDataManagerImpl mCategoryDateManger;
+    private RecyclerView mStylesItemRecyclerView;
+    private EmojiStyleWrapperManager mEmojiStyleWrapperManager;
     private ViewPagerAdapter mViewPagerAdapter;
-    private CategoryItemAdapter mCategoryItemAdapter;
+    private StylesItemAdapter mStylesItemAdapter;
     private EmojiconEditText mEmojiconEditText;
     protected LinearLayout mPointContainer; // 装点的容器
     protected View mSelectedPoint; // 选中的点
     protected int mSpace; // 点与点间的距
     private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener;
-    private ICategoryDataWrapper mCurSelectedCategoryWrapper;
+    private EmojiStyleWrapper mCurSelectedEmojiStyleWrapper;
+    private int curPagerSelectedPosition;
 
-    public static CategoriesFragment newInstance() {
-        CategoriesFragment fragment = new CategoriesFragment();
+    public static EmojiStylesFragment newInstance() {
+        EmojiStylesFragment fragment = new EmojiStylesFragment();
         return fragment;
     }
 
@@ -62,51 +60,57 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_emojicons, container, false);
         mViewPager = (ViewPager) view.findViewById(R.id.emoji_view_pager);
-        mCategoryItem = (RecyclerView) view.findViewById(R.id.emoji_category_item);
+        mStylesItemRecyclerView = (RecyclerView) view.findViewById(R.id.emoji_category_item);
         mPointContainer = (LinearLayout) view.findViewById(R.id.guide_point_container);
         mSelectedPoint = view.findViewById(R.id.guide_point_selected);
         initData();
         return view;
     }
 
-    public void setCategoryDataManager(CategoryDataManger manger){
-        mCategoryDateManger = (CategoryDataManagerImpl) manger;
+    public void setEmojiStyleWrapperManager(EmojiStyleWrapperManager manger){
+        mEmojiStyleWrapperManager =  manger;
     }
 
     private void initData(){
         mFragmentManager = getChildFragmentManager();
         mViewPagerAdapter = new ViewPagerAdapter(mFragmentManager);
         mViewPager.setAdapter(mViewPagerAdapter);
-        mCategoryItemAdapter = new CategoryItemAdapter();
-        mCategoryItem.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-        mCategoryItem.setAdapter(mCategoryItemAdapter);
-        mCategoryDateManger.setCategoryDataChangeListener(new CategoryChangeListener());
+        mStylesItemAdapter = new StylesItemAdapter();
+        mStylesItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        mStylesItemRecyclerView.setAdapter(mStylesItemAdapter);
+        mEmojiStyleWrapperManager.setEmojiStyleChangeListener(new StyleChangeListener());
         //默认显示第一个表情类目
-        mCurSelectedCategoryWrapper = mCategoryDateManger.getCategoryWrapperByPosition(0);
-        initialPoints(mCurSelectedCategoryWrapper);
-        setCategoryItemSelected(mCurSelectedCategoryWrapper);
+        mCurSelectedEmojiStyleWrapper = mEmojiStyleWrapperManager.getEmojiStyleWrapperByPosition(0);
+        initialPoints(mCurSelectedEmojiStyleWrapper);
+        setStyleItemSelected(mCurSelectedEmojiStyleWrapper);
     }
 
-    private void updateCategoryEmoji(CategoryDataChangeListener.TYPE type, BaseCategory category){
-        if(mCategoryItemAdapter != null) {
-            mCategoryItemAdapter.notifyDataSetChanged();
+    private void updateEmojiStyle(EmojiStyleChangeListener.TYPE type, EmojiStyle style){
+        if(type == EmojiStyleChangeListener.TYPE.DELETE){
+            curPagerSelectedPosition = mViewPager.getCurrentItem();
+        }
+        if(mStylesItemAdapter != null) {
+            mStylesItemAdapter.notifyDataSetChanged();
         }
         if(mViewPagerAdapter!= null) {
             mViewPagerAdapter.notifyDataSetChanged();
         }
+        if(type == EmojiStyleChangeListener.TYPE.UPDATE){
+            mViewPager.setCurrentItem(curPagerSelectedPosition,false);
+        }
     }
 
-    class CategoryChangeListener implements CategoryDataChangeListener {
+    class StyleChangeListener implements EmojiStyleChangeListener {
 
         @Override
-        public void update(final TYPE type, final BaseCategory category) {
+        public void update(final TYPE type, final EmojiStyle category) {
             if(EmojiUtil.isInMainThread()){
-                updateCategoryEmoji(type,category);
+                updateEmojiStyle(type,category);
             }else {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateCategoryEmoji(type,category);
+                        updateEmojiStyle(type,category);
                     }
                 });
             }
@@ -132,11 +136,9 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
 
         @Override
         public Fragment getItem(int position) {
-            PagerDataCategory category = mCategoryDateManger.getPagerDataCategory(position);
-            ICategoryDataWrapper categoryDataWrapper = mCategoryDateManger.getCategoryWrapperByPosition(position);
-            BaseCategoryFragment fragment = categoryDataWrapper.getFragment(category);
-            if(fragment instanceof EmojiCategoryFragment && mEmojiconEditText != null){
-                ((EmojiCategoryFragment)fragment).setOnEmojiconClickedListener(CategoriesFragment.this);
+            EmojiFragment fragment = mEmojiStyleWrapperManager.getFragment(position);
+            if(fragment instanceof EmojiconFragment && mEmojiconEditText != null){
+                ((EmojiconFragment)fragment).setOnEmojiconClickedListener(EmojiStylesFragment.this);
             }
             return fragment;
         }
@@ -148,11 +150,11 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
 
         @Override
         public int getCount() {
-            return mCategoryDateManger.getPagerCategoryCounts();
+            return mEmojiStyleWrapperManager.getEmojiPagerCounts();
         }
     }
 
-    private class CategoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private class StylesItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -166,8 +168,8 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ImageButton image = (ImageButton) holder.itemView;
-            ICategoryDataWrapper wrapper = (ICategoryDataWrapper) mCategoryDateManger.categoryWrapperMap.get(position);
-            int resourceId = wrapper.getCategoryItemIcon();
+            EmojiStyleWrapper wrapper = (EmojiStyleWrapper) mEmojiStyleWrapperManager.wrapperMap.get(position);
+            int resourceId = wrapper.getStyleIcon();
             if( resourceId > 0){
                 image.setImageResource(resourceId);
             }
@@ -181,7 +183,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
 
         @Override
         public int getItemCount() {
-            return mCategoryDateManger.getCategoryDataCounts();
+            return mEmojiStyleWrapperManager.getStyleWrapperCounts();
         }
 
         private class Holder extends RecyclerView.ViewHolder{
@@ -198,22 +200,22 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
 
         @Override
         public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-            ICategoryDataWrapper wrapper = (ICategoryDataWrapper) mCategoryDateManger.categoryWrapperMap.get(position);
-            String categoryName =  wrapper.getCategoryName();
-            mViewPager.setCurrentItem(mCategoryDateManger.getPageCategoryIndex(categoryName),false);
-            updatePointsCounts((ICategoryDataWrapper) mCategoryDateManger.categoryWrapperMap.get(position));
-            setCategoryItemSelected(wrapper);
+            EmojiStyleWrapper wrapper = (EmojiStyleWrapper) mEmojiStyleWrapperManager.wrapperMap.get(position);
+            String styleName =  wrapper.getStyleName();
+            mViewPager.setCurrentItem(mEmojiStyleWrapperManager.getViewPageIndexByEmojiStyleName(styleName),false);
+            updatePointsCounts(wrapper);
+            setStyleItemSelected(wrapper);
         }
     }
 
-    private void setCategoryItemSelected(ICategoryDataWrapper wrapper){
-        mCurSelectedCategoryWrapper = wrapper;
-        mCategoryDateManger.setSelectedCategoryWrapper(wrapper);
-        mCategoryItemAdapter.notifyDataSetChanged();
+    private void setStyleItemSelected(EmojiStyleWrapper wrapper){
+        mCurSelectedEmojiStyleWrapper = wrapper;
+        mEmojiStyleWrapperManager.setSelectedStyleWrapper(wrapper);
+        mStylesItemAdapter.notifyDataSetChanged();
     }
 
 
-    private int updatePointsCounts(ICategoryDataWrapper wrapper){
+    private int updatePointsCounts(EmojiStyleWrapper wrapper){
         final int pointsCounts = wrapper.getPagerCounts();
         int curPoints = mPointContainer.getChildCount();
         if(curPoints == pointsCounts){
@@ -234,7 +236,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
                 mPointContainer.addView(imageView);
             }
         }
-        mCurSelectedCategoryWrapper = wrapper;
+        mCurSelectedEmojiStyleWrapper = wrapper;
         if (pointsCounts <= 1) {
             mSelectedPoint.setVisibility(View.GONE);
             mPointContainer.setVisibility(View.GONE);
@@ -247,7 +249,7 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
     /**
      * 初始化和viewpager关联的点
      */
-    protected void initialPoints(ICategoryDataWrapper wrapper) {
+    protected void initialPoints(EmojiStyleWrapper wrapper) {
         mSpace = 0;
         final int pointsCounts = updatePointsCounts(wrapper);
         mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -275,17 +277,17 @@ public class CategoriesFragment extends Fragment implements EmojiCategoryFragmen
                 RelativeLayout.LayoutParams params =
                         (RelativeLayout.LayoutParams) mSelectedPoint
                                 .getLayoutParams();
-                ICategoryDataWrapper wrapper = mCategoryDateManger.getCategoryWrapperByPosition(position);
-                if(wrapper != mCurSelectedCategoryWrapper){
-                    setCategoryItemSelected(wrapper);
+                EmojiStyleWrapper wrapper = mEmojiStyleWrapperManager.getEmojiStyleWrapperByPosition(position);
+                if(wrapper != mCurSelectedEmojiStyleWrapper){
+                    setStyleItemSelected(wrapper);
                 }
                 updatePointsCounts(wrapper);
-                int index = mCategoryDateManger.getCategoryDataWrapperIndexByPosition(position);
+                int index = mEmojiStyleWrapperManager.getPagerIndexAtStyleWrapperByVPPosition(position);
                 params.leftMargin = (int) (mSpace * index + mSpace *
                         positionOffset + 0.5f);// 四舍五入
 
                 mSelectedPoint.setLayoutParams(params);
-                Log.e("nick","onPageScrolled----> "+pointsCounts +" wrapper index: "+index+" name: "+ mCurSelectedCategoryWrapper.getCategoryName());
+                Log.e("nick","onPageScrolled----> "+pointsCounts +" wrapper index: "+index+" name: "+ mCurSelectedEmojiStyleWrapper.getStyleName());
             }
 
             @Override

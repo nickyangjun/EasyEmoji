@@ -168,62 +168,6 @@ public class ImageLoader {
         }
     }
 
-    //同步方法 获取到bitmap对象并且不缓存
-    public Bitmap loadImageSyncSkipCache(Context context, String uri) {
-        try {
-            return Glide.with(context.getApplicationContext())
-                    .load(uri)
-                    .asBitmap()
-                    .diskCacheStrategy(mDiskCacheStrategy)
-                    .skipMemoryCache(true)
-                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .get();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    //兼容方法
-    public void displayImageAsBitmap(String uri, ImageView imageView,int icon) {
-        GenericRequestBuilder req =  Glide.with(imageView.getContext().getApplicationContext()).load(uri).asBitmap()
-                .diskCacheStrategy(mDiskCacheStrategy);
-        if(icon > 0 ) {
-            req.error(icon);
-        }
-        req.into(imageView);
-    }
-    //兼容方法
-    public void loadCircleImage(Context context,String uri, int placeholder, int error, final LoadImageListener listener){
-        GenericRequestBuilder req = Glide.with(context.getApplicationContext()).load(uri).asBitmap().diskCacheStrategy(mDiskCacheStrategy).skipMemoryCache(true)
-                .transform(new GlideCircleTransform(context));
-        if (placeholder > 0) {
-            req.placeholder(placeholder);
-        }
-        if (error > 0) {
-            req.error(error);
-        }
-        req.into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                listener.onLoadingComplete(bitmap);
-            }
-        });
-    }
-
-    public void loadImage(Context context, String uri, int defaultIcon, final LoadImageListener listener) {
-        GenericRequestBuilder req = Glide.with(context.getApplicationContext()).load(uri).asBitmap().diskCacheStrategy(mDiskCacheStrategy).skipMemoryCache(true);
-        if (defaultIcon > 0) {
-            req.placeholder(defaultIcon);
-            req.error(defaultIcon);
-        }
-        req.into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
-                listener.onLoadingComplete(bitmap);
-            }
-        });
-    }
-
     public interface LoadImageListener {
         void onLoadingComplete(Bitmap bitmap);
     }
@@ -233,8 +177,4 @@ public class ImageLoader {
         void onLoadFailed(String imageUri, ImageView view);
     }
 
-    //清理缓存
-    public void clearMemoryCache(Context context) {
-        Glide.get(context).clearMemory();
-    }
 }

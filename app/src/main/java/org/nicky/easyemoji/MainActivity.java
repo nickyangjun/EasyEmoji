@@ -1,22 +1,25 @@
 package org.nicky.easyemoji;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.nicky.easyemoji.fragments.AttachFragment;
 import org.nicky.libeasyemoji.EasyInput.EasyInputManagerImpl;
 import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnPanelListener;
+import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
 import org.nicky.libeasyemoji.emojicon.emoji.Emojicon;
-import org.nicky.libeasyemoji.emojicon.emoji.ObjectsCategory;
-import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
+import org.nicky.libeasyemoji.emojicon.emoji.ObjectsStyle;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,9 +49,11 @@ public class MainActivity extends AppCompatActivity {
     Button addOneEmoji;
     @BindView(R.id.delete_a_emoji)
     Button deleteOneEmoji;
+    @BindView(R.id.publish)
+    TextView publish;
 
     protected EasyInputManager mEasyInputManager;
-    private BaseCategory category = new ObjectsCategory();
+    private EmojiStyle category = new ObjectsStyle();
 
 
     @Override
@@ -63,6 +68,27 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager.setTouchBlankAutoHideIME(true,dip2px(this, 50));
         mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
         mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
+
+        emojiconEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>0){
+                    publish.setBackgroundColor(getResources().getColor(R.color.blue));
+                }else {
+                    publish.setBackgroundColor(getResources().getColor(R.color.hint_gray_999));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @OnClick(R.id.emojicon_switch)
@@ -97,18 +123,18 @@ public class MainActivity extends AppCompatActivity {
                 mEasyInputManager.closePanel();
                 break;
             case R.id.add_emoji:
-                mEasyInputManager.getEmojiBuilder().addEmojiCategory(category);
+                mEasyInputManager.getEmojiBuilder().addEmojiStyle(category);
                 break;
             case R.id.delete_emoji:
-                mEasyInputManager.getEmojiBuilder().deleteEmojiCategory(category.getCategoryName());
+                mEasyInputManager.getEmojiBuilder().deleteEmojiStyle(category.getStyleName());
                 break;
             case R.id.add_a_emoji:
                 category.getEmojiData().add(Emojicon.fromCodePoint(0x1f3e0));
-                mEasyInputManager.getEmojiBuilder().updateEmojiCategory(category);
+                mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
                 break;
             case R.id.delete_a_emoji:
                 category.getEmojiData().remove(category.getEmojiData().size()-1);
-                mEasyInputManager.getEmojiBuilder().updateEmojiCategory(category);
+                mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
                 break;
         }
     }

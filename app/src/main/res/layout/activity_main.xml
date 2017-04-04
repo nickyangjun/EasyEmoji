@@ -108,6 +108,11 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/dividerDDDDDD" />
+
     <RelativeLayout
         android:id="@+id/id_input_area"
         android:layout_width="match_parent"
@@ -116,29 +121,20 @@
         android:gravity="center_vertical"
         android:minHeight="50dp"
         android:orientation="horizontal"
-        android:paddingBottom="2dp"
-        android:paddingTop="10dp">
-
-        <ImageView
-            android:id="@+id/attach"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:src="@drawable/chatting_plus_btn_icon" />
-
+        android:paddingBottom="2dp">
 
         <org.nicky.libeasyemoji.emojicon.EmojiconEditText xmlns:Emojicon="http://schemas.android.com/apk/res-auto"
             android:id="@+id/emoji_input_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="90dp"
-            android:layout_toRightOf="@id/attach"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="100dp"
             android:background="@drawable/shape_input_text"
             android:hint="说点什么吧~"
             android:lineSpacingExtra="1dp"
             android:maxLength="140"
             android:maxLines="4"
-            android:minHeight="30dp"
+            android:minHeight="35dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/black"
@@ -146,11 +142,19 @@
             android:textSize="14sp"
             Emojicon:emojiconSize="18sp" />
 
+        <ImageView
+            android:id="@+id/attach"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignBottom="@id/emoji_input_txt"
+            android:padding="5dp"
+            android:src="@drawable/chatting_plus_btn_icon" />
+
         <TextView
             android:id="@+id/publish"
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:layout_alignBaseline="@id/emoji_input_txt"
+            android:layout_alignBottom="@id/attach"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/shape_bg_round4"
@@ -161,13 +165,15 @@
 
         <CheckBox
             android:id="@+id/emojicon_switch"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignBaseline="@id/emoji_input_txt"
-            android:layout_marginBottom="5dp"
-            android:layout_toLeftOf="@id/publish"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignBottom="@id/emoji_input_txt"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="68dp"
             android:background="@drawable/emojicon_switch"
             android:button="@null" />
+
     </RelativeLayout>
 
 

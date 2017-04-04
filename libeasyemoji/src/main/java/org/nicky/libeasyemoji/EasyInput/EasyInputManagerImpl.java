@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -13,13 +14,12 @@ import org.nicky.libeasyemoji.EasyInput.interfaces.IPanelContentManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.IPanelLayout;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnPanelListener;
-import org.nicky.libeasyemoji.emojicon.CategoriesFragment;
-import org.nicky.libeasyemoji.emojicon.CategoryDataManagerImpl;
+import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
+import org.nicky.libeasyemoji.emoji.EmojiStyleWrapperManager;
+import org.nicky.libeasyemoji.emoji.EmojiStylesFragment;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
-import org.nicky.libeasyemoji.emojicon.emoji.NatureCategory;
-import org.nicky.libeasyemoji.emojicon.emoji.PeopleCategory;
-import org.nicky.libeasyemoji.emojicon.interfaces.BaseCategory;
-import org.nicky.libeasyemoji.emojicon.interfaces.CategoryDataManger;
+import org.nicky.libeasyemoji.emojicon.emoji.NatureStyle;
+import org.nicky.libeasyemoji.emojicon.emoji.PeopleStyle;
 
 
 /**
@@ -94,15 +94,16 @@ public class EasyInputManagerImpl implements EasyInputManager {
         getEmojiBuilder()
                 .setTag(tag)
                 .setEmojiconEditText(emojiconEditText)
-                .addEmojiCategory(new PeopleCategory())
-                .addEmojiCategory(new NatureCategory()).build();
+                .addEmojiStyle(new PeopleStyle())
+                .addEmojiStyle(new NatureStyle())
+                .build();
     }
 
     public Builder getEmojiBuilder(){
         if(mBuilder == null){
             synchronized (this) {
                 if(mBuilder == null) {
-                    mBuilder = new Builder(mPanelContentManager);
+                    mBuilder = new Builder((Activity) mContext,mPanelContentManager);
                 }
             }
         }
@@ -130,15 +131,17 @@ public class EasyInputManagerImpl implements EasyInputManager {
     }
 
     public static class Builder<T extends Parcelable>{
-        CategoriesFragment fragment;
+        Activity activity;
+        EmojiStylesFragment fragment;
         IPanelContentManager panelContentManager;
-        CategoryDataManger<T> manger;
+        EmojiStyleWrapperManager manger;
         EmojiconEditText text;
         String tag;
 
-        public Builder(IPanelContentManager panelContentManager){
+        public Builder(Activity activity,IPanelContentManager panelContentManager){
+            this.activity = activity;
             this.panelContentManager = panelContentManager;
-            manger = CategoryDataManagerImpl.newInstance();
+            manger = new EmojiStyleWrapperManager(activity);
         }
 
         public Builder setTag(String tag){
@@ -151,19 +154,18 @@ public class EasyInputManagerImpl implements EasyInputManager {
             return this;
         }
 
-        public Builder addEmojiCategory(BaseCategory category){
-            manger.addCategory(category);
+        public Builder addEmojiStyle(EmojiStyle style){
+            manger.addEmojiStyle(style);
             return this;
         }
 
-        public Builder deleteEmojiCategory(String tag){
-            manger.deleteCategory(tag);
+        public Builder deleteEmojiStyle(String tag){
+            manger.deleteEmojiStyle(tag);
             return this;
         }
 
-        public Builder updateEmojiCategory(BaseCategory category){
-            manger.updateCategory(category);
-            return this;
+        public void updateEmojiStyle(EmojiStyle style){
+            manger.updateStyle(style);
         }
 
         public void build(){
@@ -173,11 +175,16 @@ public class EasyInputManagerImpl implements EasyInputManager {
             if(fragment != null){
                 throw new RuntimeException("don't need invoke build() method twice to the same Builder instance !!!");
             }
-            fragment = CategoriesFragment.newInstance();
+            EmojiStylesFragment fragment = (EmojiStylesFragment) ((FragmentActivity)activity)
+                    .getSupportFragmentManager()
+                    .findFragmentByTag(tag);
+            if(fragment == null) {
+                fragment = EmojiStylesFragment.newInstance();
+            }
             if(text != null) {
                 fragment.setEmojiconEditText(text);
             }
-            fragment.setCategoryDataManager(manger);
+            fragment.setEmojiStyleWrapperManager(manger);
             panelContentManager.addContent(tag,fragment);
         }
     }
