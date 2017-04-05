@@ -3,7 +3,9 @@ Add emoji so easy
 
 让你的App添加表情最简单，最快速，并且无需更改原有activity布局。
 
-##Download
+![](file:./screenshot/device-2017-04-06-001235.png)
+
+## Download
 
 **Gradle:**
 
@@ -42,7 +44,7 @@ Or Maven:
 ```
 
 
-##How do I use Glide?
+## How do I use Glide?
 
 
 
