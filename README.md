@@ -3,7 +3,7 @@ Add emoji so easy
 
 让你的App添加表情最简单，最快速，并且无需更改原有activity布局。
 
-![](file:./screenshot/device-2017-04-06-001235.png)
+<img src="./screenshot/02.gif" width="320" height="480">
 
 ## Download
 
