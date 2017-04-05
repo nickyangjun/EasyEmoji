@@ -17,8 +17,6 @@ public class LovedEmojiInterceptor implements EmojiInterceptor {
     @Override
     public Target intercept(Spannable text, int startIndex) {
         for(int i=startIndex;i<text.length();i++) {
-            int unicode = Character.codePointAt(text, i);
-            int skip = Character.charCount(unicode);
             String pattern = "^(\\[(\\w|[\\u4e00-\\u9fa5]){1,4}\\])";
             Pattern r = Pattern.compile(pattern);
             Matcher m = r.matcher(text.subSequence(startIndex,text.length()));
