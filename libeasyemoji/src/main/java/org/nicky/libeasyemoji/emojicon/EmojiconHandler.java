@@ -17,6 +17,7 @@ package org.nicky.libeasyemoji.emojicon;
 
 import android.content.Context;
 import android.text.Spannable;
+import android.util.Log;
 import android.util.SparseIntArray;
 
 import org.nicky.libeasyemoji.R;
@@ -1718,6 +1719,18 @@ public final class EmojiconHandler {
                         skip += followSkip;
                     }
                 }
+            }
+
+            if(c == '[' && textLengthToProcess > i+1){
+                char c1 = text.charAt(i+1);
+                StringBuilder builder = new StringBuilder();
+                builder.append(c);
+                builder.append(c1);
+                if(builder.toString().equals("[笑")){
+                    Log.e("xxx","xxxx");
+                }
+//                char c2 = text.charAt(i+2);
+//                char c3 = text.charAt(i+3);
             }
 
             if (icon > 0) {

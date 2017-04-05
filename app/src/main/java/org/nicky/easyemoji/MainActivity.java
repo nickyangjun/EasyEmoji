@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.nicky.easyemoji.fragments.AttachFragment;
+import org.nicky.easyemoji.lovedEmoji.LovedEmojiStyle;
 import org.nicky.libeasyemoji.EasyInput.EasyInputManagerImpl;
 import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
@@ -51,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
     Button deleteOneEmoji;
     @BindView(R.id.publish)
     TextView publish;
+    @BindView(R.id.emoji_txt)
+    TextView txt;
 
     protected EasyInputManager mEasyInputManager;
     private EmojiStyle category = new ObjectsStyle();
-
+    private EmojiStyle lovedEmoji = new LovedEmojiStyle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager.setTouchBlankAutoHideIME(true,dip2px(this, 50));
         mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
         mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
+        mEasyInputManager.getEmojiBuilder().addEmojiStyle(lovedEmoji);
 
         emojiconEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -78,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()>0){
-                    publish.setBackgroundColor(getResources().getColor(R.color.blue));
+                    publish.setBackground(getResources().getDrawable(R.drawable.shape_bg_blue_round_active));
                 }else {
-                    publish.setBackgroundColor(getResources().getColor(R.color.hint_gray_999));
+                    publish.setBackground(getResources().getDrawable(R.drawable.shape_bg_grey_round));
                 }
             }
 
@@ -107,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji,
-                R.id.delete_a_emoji,R.id.add_a_emoji})
+                R.id.delete_a_emoji,R.id.add_a_emoji,R.id.publish})
     void onClick(View view){
         switch (view.getId()){
             case R.id.open_keyboard:
@@ -135,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.delete_a_emoji:
                 category.getEmojiData().remove(category.getEmojiData().size()-1);
                 mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
+                break;
+            case R.id.publish:
+                txt.setText(emojiconEditText.getText());
                 break;
         }
     }

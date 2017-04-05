@@ -13,6 +13,8 @@ import org.nicky.libeasyemoji.emoji.interfaces.PageEmojiStyle;
 
 public abstract class EmojiFragment<T extends Parcelable> extends Fragment {
 
+    protected OnEmojiconClickedListener mOnEmojiconClickedListener;
+
     protected Bundle saveState = new Bundle();
 
     final public void setEmojiData(PageEmojiStyle<T> emojiData){
@@ -47,5 +49,14 @@ public abstract class EmojiFragment<T extends Parcelable> extends Fragment {
                 setEmojiData((PageEmojiStyle) data.getParcelable("emojiData"));
             }
         }
+    }
+
+    public void setOnEmojiconClickedListener(OnEmojiconClickedListener listener){
+        mOnEmojiconClickedListener = listener;
+    }
+
+    public interface OnEmojiconClickedListener {
+        void onEmojiconClicked(String emojiCode);
+        void onBackspaceClicked();
     }
 }

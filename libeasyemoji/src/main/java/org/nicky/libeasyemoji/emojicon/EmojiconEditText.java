@@ -22,6 +22,7 @@ import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 
 import org.nicky.libeasyemoji.R;
+import org.nicky.libeasyemoji.emoji.EmojiHandler;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com).
@@ -60,7 +61,7 @@ public class EmojiconEditText extends AppCompatEditText {
 
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        updateText();
+        updateText(start,lengthAfter);
     }
 
     /**
@@ -69,11 +70,12 @@ public class EmojiconEditText extends AppCompatEditText {
     public void setEmojiconSize(int pixels) {
         mEmojiconSize = pixels;
 
-        updateText();
+        updateText(0,-1);
     }
 
-    private void updateText() {
-        EmojiconHandler.addEmojis(getContext(), getText(), mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mUseSystemDefault);
+    private void updateText(int start,int lenthAfter) {
+        EmojiHandler.getInstance().handleEmojis(getContext(), getText(), mEmojiconSize,
+                                mEmojiconAlignment, mEmojiconTextSize,start,lenthAfter, mUseSystemDefault);
     }
 
     /**

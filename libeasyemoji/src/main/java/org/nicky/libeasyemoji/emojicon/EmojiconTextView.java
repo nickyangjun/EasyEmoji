@@ -25,6 +25,7 @@ import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 
 import org.nicky.libeasyemoji.R;
+import org.nicky.libeasyemoji.emoji.EmojiHandler;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com).
@@ -72,7 +73,7 @@ public class EmojiconTextView extends AppCompatTextView {
     public void setText(CharSequence text, BufferType type) {
         if (!TextUtils.isEmpty(text)) {
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
-            EmojiconHandler.addEmojis(getContext(), builder, mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mTextStart, mTextLength, mUseSystemDefault);
+            EmojiHandler.getInstance().handleEmojis(getContext(),builder,mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mTextStart, mTextLength, mUseSystemDefault);
             text = builder;
         }
         super.setText(text, type);

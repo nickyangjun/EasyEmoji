@@ -118,7 +118,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
     }
 
     @Override
-    public void onEmojiconClicked(Emojicon emojicon) {
+    public void onEmojiconClicked(String emojicon) {
         EmojiUtil.input(mEmojiconEditText,emojicon);
     }
 
@@ -137,8 +137,8 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         @Override
         public Fragment getItem(int position) {
             EmojiFragment fragment = mEmojiStyleWrapperManager.getFragment(position);
-            if(fragment instanceof EmojiconFragment && mEmojiconEditText != null){
-                ((EmojiconFragment)fragment).setOnEmojiconClickedListener(EmojiStylesFragment.this);
+            if(mEmojiconEditText != null){
+                fragment.setOnEmojiconClickedListener(EmojiStylesFragment.this);
             }
             return fragment;
         }
@@ -287,7 +287,6 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
                         positionOffset + 0.5f);// 四舍五入
 
                 mSelectedPoint.setLayoutParams(params);
-                Log.e("nick","onPageScrolled----> "+pointsCounts +" wrapper index: "+index+" name: "+ mCurSelectedEmojiStyleWrapper.getStyleName());
             }
 
             @Override

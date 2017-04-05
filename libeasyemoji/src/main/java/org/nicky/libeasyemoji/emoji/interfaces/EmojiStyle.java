@@ -16,4 +16,5 @@ public interface EmojiStyle<T extends Parcelable> {
     List<T> getEmojiData();
     EmojiFragment getCustomFragment(int index);
     PageEmojiStyle getPagerData(int index);
+    EmojiInterceptor getEmojiInterceptor();
 }

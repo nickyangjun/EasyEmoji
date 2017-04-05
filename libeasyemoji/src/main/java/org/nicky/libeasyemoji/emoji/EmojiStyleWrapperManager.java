@@ -99,6 +99,9 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         }
         EmojiStyleWrapper wrapper = new EmojiStyleWrapper(style);
         wrapperMap.add(position,style.getStyleName(),wrapper);
+        if(style.getEmojiInterceptor() != null){
+            EmojiHandler.getInstance().addInterceptor(style.getEmojiInterceptor());
+        }
         if(styleChangeListener != null){
             styleChangeListener.update(EmojiStyleChangeListener.TYPE.ADD,style);
         }

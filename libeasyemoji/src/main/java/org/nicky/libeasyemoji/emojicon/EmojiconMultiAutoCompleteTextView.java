@@ -23,6 +23,7 @@ import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 
 import org.nicky.libeasyemoji.R;
+import org.nicky.libeasyemoji.emoji.EmojiHandler;
 
 public class EmojiconMultiAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
     private int mEmojiconSize;
@@ -71,7 +72,7 @@ public class EmojiconMultiAutoCompleteTextView extends AppCompatMultiAutoComplet
     }
 
     private void updateText() {
-        EmojiconHandler.addEmojis(getContext(), getText(), mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mUseSystemDefault);
+        EmojiHandler.getInstance().handleEmojis(getContext(), getText(), mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize,0,-1, mUseSystemDefault);
     }
 
     /**

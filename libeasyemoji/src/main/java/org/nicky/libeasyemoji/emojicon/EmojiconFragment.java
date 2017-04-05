@@ -23,7 +23,6 @@ public class EmojiconFragment<T extends Emojicon> extends EmojiFragment {
     private EmojiconPageEmojiStyle<T> emojiconData;
     private RecyclerView mRecyclerView;
     private EmojiAdapter mEmojiAdapter;
-    private OnEmojiconClickedListener mOnEmojiconClickedListener;
 
     @Override
     public void setData(PageEmojiStyle emojiData) {
@@ -81,7 +80,7 @@ public class EmojiconFragment<T extends Emojicon> extends EmojiFragment {
                         if(position == getItemCount() -1){
                             mOnEmojiconClickedListener.onBackspaceClicked();
                         }else {
-                            mOnEmojiconClickedListener.onEmojiconClicked(emojiconData.getData().get(position));
+                            mOnEmojiconClickedListener.onEmojiconClicked(emojiconData.getData().get(position).getEmoji());
                         }
                     }
                 }
@@ -113,15 +112,5 @@ public class EmojiconFragment<T extends Emojicon> extends EmojiFragment {
                 super(itemView);
             }
         }
-    }
-
-
-    public void setOnEmojiconClickedListener(OnEmojiconClickedListener listener){
-        mOnEmojiconClickedListener = listener;
-    }
-
-    public interface OnEmojiconClickedListener {
-        void onEmojiconClicked(Emojicon emojicon);
-        void onBackspaceClicked();
     }
 }

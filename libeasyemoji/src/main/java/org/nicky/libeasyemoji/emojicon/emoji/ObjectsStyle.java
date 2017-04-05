@@ -2,6 +2,7 @@ package org.nicky.libeasyemoji.emojicon.emoji;
 
 import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.EmojiFragment;
+import org.nicky.libeasyemoji.emoji.interfaces.EmojiInterceptor;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
 import org.nicky.libeasyemoji.emoji.interfaces.PageEmojiStyle;
 import org.nicky.libeasyemoji.emojicon.EmojiconFragment;
@@ -44,5 +45,10 @@ public class ObjectsStyle implements EmojiStyle {
     @Override
     public PageEmojiStyle getPagerData(int index) {
         return new EmojiconPageEmojiStyle();
+    }
+
+    @Override
+    public EmojiInterceptor getEmojiInterceptor() {
+        return null;
     }
 }
