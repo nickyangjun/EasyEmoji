@@ -6,9 +6,11 @@ Add emoji so easy
 <img src="./screenshot/02.gif" width="320" height="480">
 
 可自由扩展面板功能：
+
 <img src="./screenshot/device-2017-04-06-081451.png" width="320" height="480">
 
 可自由扩展emoji表情功能：
+
 <img src="./screenshot/device-2017-04-06-081547.png" width="320" height="480">
 
 ## Download
@@ -97,7 +99,8 @@ Step 2. Get EasyInputManager instance and add default Emoji in your activity，n
 ```
 
 
-
+<br>
+<br>
 
 ### More features can refer to the demo.
 
