@@ -29,7 +29,7 @@ public class EmojiUtil {
         } else {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
                 int length = getEditTextMaxLength(editText);
-                if(start+emoji.length() > length){
+                if(length>0 && start+emoji.length() > length){
                     return;
                 }
             }
