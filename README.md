@@ -142,3 +142,6 @@ mEasyInputManager.getEmojiBuilder().addEmojiStyle(lovedEmoji);
 //update
 mEasyInputManager.getEmojiBuilder().updateEmojiStyle(lovedEmoji);
 ```
+
+
+**为了更好的完善此框架，希望更多对此框架有兴趣的朋友一起加入进来打造更易用更完善的EasyEmoji,欢迎star!!!**
