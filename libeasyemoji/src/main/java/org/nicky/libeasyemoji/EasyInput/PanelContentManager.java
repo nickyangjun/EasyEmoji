@@ -28,7 +28,7 @@ public class PanelContentManager implements IPanelContentManager {
     private Object lastDisplayContent;
     private Object currentDisplayContent;
     private String currentContentTag;
-    private boolean hasPanelContent;
+    private boolean hasPanelContent; //当前是否已经有panel显示
     private Context mContext;
     private FragmentManager fragmentManager;
 
@@ -65,7 +65,7 @@ public class PanelContentManager implements IPanelContentManager {
         } else if (fragmentMap.containsKey(tag)) {
             content = fragmentMap.get(tag);
         } else {
-            throw new RuntimeException("no view or fragment add to panel, please invoke add first!");
+            throw new IllegalArgumentException("no view or fragment add to panel, please invoke add first!");
         }
 
         if (content != currentDisplayContent) {
@@ -93,6 +93,32 @@ public class PanelContentManager implements IPanelContentManager {
     @Override
     public String getCurrentPanelDisplayTag() {
         return currentContentTag;
+    }
+
+    @Override
+    public void removeContent(String tag) {
+        if(TextUtils.isEmpty(tag)){
+            return;
+        }
+
+        if(currentContentTag.equals(tag)){
+            mIPanelLayout.closePanel();
+            currentContentTag = "";
+            currentDisplayContent = null;
+            hasPanelContent = false;
+        }
+        if(viewMap.containsKey(tag)){
+            viewMap.remove(tag);
+        }else if(fragmentMap.containsKey(tag)){
+            fragmentMap.remove(tag);
+            if (fragmentManager == null) {
+                fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+            }
+            Fragment snapFragment = fragmentManager.findFragmentByTag(tag);
+            if(snapFragment != null){
+                fragmentManager.beginTransaction().remove(snapFragment);
+            }
+        }
     }
 
     private boolean addContentToPanel() {

@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     Button closePanel;
     @BindView(R.id.open_panel)
     Button openPanel;
+    @BindView(R.id.add_panel)
+    Button addPanel;
+    @BindView(R.id.delete_panel)
+    Button deletePanel;
     @BindView(R.id.attach)
     ImageView attach;
     @BindView(R.id.add_emoji)
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji,
-                R.id.delete_a_emoji,R.id.add_a_emoji,R.id.publish})
+                R.id.delete_a_emoji,R.id.add_a_emoji,R.id.publish,R.id.add_panel,R.id.delete_panel})
     void onClick(View view){
         switch (view.getId()){
             case R.id.open_keyboard:
@@ -142,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.publish:
                 txt.setText(emojiconEditText.getText());
+                break;
+            case R.id.add_panel:
+                mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
+                break;
+            case R.id.delete_panel:
+                mEasyInputManager.removeFragmentToPanel("attach");
                 break;
         }
     }

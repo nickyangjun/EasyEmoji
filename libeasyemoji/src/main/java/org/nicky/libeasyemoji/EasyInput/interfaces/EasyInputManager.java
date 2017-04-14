@@ -21,7 +21,9 @@ public interface EasyInputManager {
     void addOnKeyboardIMEListener(OnKeyboardListener listener);
     void setTouchBlankAutoHideIME(boolean autoHideIME, int offsetPixel);
     void addFragmentToPanel(String tag, Fragment panelFragment);
+    void removeFragmentToPanel(String tag);
     void addViewToPanel(String tag, View panelView);
+    void removeViewToPanel(String tag);
     void addDefaultEmoji(String tag,EmojiconEditText emojiconEditText);
     EasyInputManagerImpl.Builder getEmojiBuilder();
     String getCurrentPanelDisplayTag();

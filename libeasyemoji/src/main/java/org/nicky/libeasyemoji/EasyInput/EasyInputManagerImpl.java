@@ -85,8 +85,18 @@ public class EasyInputManagerImpl implements EasyInputManager {
     }
 
     @Override
+    public void removeFragmentToPanel(String tag) {
+        mPanelContentManager.removeContent(tag);
+    }
+
+    @Override
     public void addViewToPanel(String tag, View panelView) {
         mPanelContentManager.addContent(tag,panelView);
+    }
+
+    @Override
+    public void removeViewToPanel(String tag) {
+        mPanelContentManager.removeContent(tag);
     }
 
     @Override

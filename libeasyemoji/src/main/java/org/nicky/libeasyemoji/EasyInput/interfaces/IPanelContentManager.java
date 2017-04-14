@@ -9,4 +9,5 @@ public interface IPanelContentManager {
     void openPanel(String tag);
     void closePanel();
     String getCurrentPanelDisplayTag();
+    void removeContent(String tag);
 }
