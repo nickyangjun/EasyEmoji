@@ -116,7 +116,7 @@ public class PanelContentManager implements IPanelContentManager {
             }
             Fragment snapFragment = fragmentManager.findFragmentByTag(tag);
             if(snapFragment != null){
-                fragmentManager.beginTransaction().remove(snapFragment);
+                fragmentManager.beginTransaction().remove(snapFragment).commitAllowingStateLoss();
             }
         }
     }
