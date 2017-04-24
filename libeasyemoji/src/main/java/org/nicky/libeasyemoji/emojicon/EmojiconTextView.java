@@ -19,13 +19,10 @@ package org.nicky.libeasyemoji.emojicon;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatTextView;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 
 import org.nicky.libeasyemoji.R;
-import org.nicky.libeasyemoji.emoji.EmojiHandler;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com).
@@ -66,17 +63,8 @@ public class EmojiconTextView extends AppCompatTextView {
             mUseSystemDefault = a.getBoolean(R.styleable.Emojicon_emojiconUseSystemDefault, false);
             a.recycle();
         }
+        addTextChangedListener(new EmojiTextWatcher(getContext(),mEmojiconSize,mEmojiconAlignment,mEmojiconTextSize,mUseSystemDefault));
         setText(getText());
-    }
-
-    @Override
-    public void setText(CharSequence text, BufferType type) {
-        if (!TextUtils.isEmpty(text)) {
-            SpannableStringBuilder builder = new SpannableStringBuilder(text);
-            EmojiHandler.getInstance().handleEmojis(getContext(),builder,mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mTextStart, mTextLength, mUseSystemDefault);
-            text = builder;
-        }
-        super.setText(text, type);
     }
 
     /**
@@ -92,5 +80,6 @@ public class EmojiconTextView extends AppCompatTextView {
      */
     public void setUseSystemDefault(boolean useSystemDefault) {
         mUseSystemDefault = useSystemDefault;
+        setText(getText());
     }
 }

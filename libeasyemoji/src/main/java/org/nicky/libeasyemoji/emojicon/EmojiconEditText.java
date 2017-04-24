@@ -18,6 +18,7 @@ package org.nicky.libeasyemoji.emojicon;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.TextWatcher;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 
@@ -56,12 +57,12 @@ public class EmojiconEditText extends AppCompatEditText {
         mUseSystemDefault = a.getBoolean(R.styleable.Emojicon_emojiconUseSystemDefault, false);
         a.recycle();
         mEmojiconTextSize = (int) getTextSize();
+        addTextChangedListener(new EmojiTextWatcher(getContext(),mEmojiconSize,mEmojiconAlignment,mEmojiconTextSize,mUseSystemDefault));
         setText(getText());
     }
 
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        updateText(start,lengthAfter);
     }
 
     /**
@@ -69,19 +70,15 @@ public class EmojiconEditText extends AppCompatEditText {
      */
     public void setEmojiconSize(int pixels) {
         mEmojiconSize = pixels;
-
-        updateText(0,-1);
+        setText(getText());
     }
 
-    private void updateText(int start,int lenthAfter) {
-        EmojiHandler.getInstance().handleEmojis(getContext(), getText(), mEmojiconSize,
-                                mEmojiconAlignment, mEmojiconTextSize,start,lenthAfter, mUseSystemDefault);
-    }
 
     /**
      * Set whether to use system default emojicon
      */
     public void setUseSystemDefault(boolean useSystemDefault) {
         mUseSystemDefault = useSystemDefault;
+        setText(getText());
     }
 }

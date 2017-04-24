@@ -30,7 +30,7 @@ public final class LovedEmojicons {
         emojiconMap.put("[大哭]", R.drawable.sg010);
         emojiconMap.put("[尴尬]", R.drawable.sg026);
         emojiconMap.put("[发怒]", R.drawable.sg025);
-        emojiconMap.put("[调皮]", R.drawable.sg003);
+        emojiconMap.put("[调皮]", R.drawable.sg143);
         emojiconMap.put("[呲牙]", R.drawable.sg001);
         emojiconMap.put("[惊讶]", R.drawable.sg034);
         emojiconMap.put("[难过]", R.drawable.sg033);
@@ -80,8 +80,8 @@ public final class LovedEmojicons {
         emojiconMap.put("[猪头]", R.drawable.sg008);
         emojiconMap.put("[玫瑰]", R.drawable.sg009);
         emojiconMap.put("[凋谢]", R.drawable.sg058);
-        emojiconMap.put("[吻]", R.drawable.sg029);
-        emojiconMap.put("[爱心]", R.drawable.sg030);
+        emojiconMap.put("[吻]", R.drawable.sg030);
+        emojiconMap.put("[爱心]", R.drawable.sg029);
         emojiconMap.put("[心碎]", R.drawable.sg073);
         emojiconMap.put("[蛋糕]", R.drawable.sg060);
         emojiconMap.put("[炸弹]", R.drawable.sg017);
