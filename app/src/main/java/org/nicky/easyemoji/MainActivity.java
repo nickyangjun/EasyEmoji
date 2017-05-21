@@ -141,8 +141,10 @@ public class MainActivity extends AppCompatActivity {
                 mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
                 break;
             case R.id.delete_a_emoji:
-                category.getEmojiData().remove(category.getEmojiData().size()-1);
-                mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
+                if(category.getEmojiData().size()>0) {
+                    category.getEmojiData().remove(category.getEmojiData().size() - 1);
+                    mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
+                }
                 break;
             case R.id.publish:
                 txt.setText(emojiconEditText.getText());

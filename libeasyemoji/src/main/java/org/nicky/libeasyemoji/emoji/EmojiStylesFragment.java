@@ -45,7 +45,6 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
     protected int mSpace; // 点与点间的距
     private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener;
     private EmojiStyleWrapper mCurSelectedEmojiStyleWrapper;
-    private int curPagerSelectedPosition;
 
     public static EmojiStylesFragment newInstance() {
         EmojiStylesFragment fragment = new EmojiStylesFragment();
@@ -85,32 +84,29 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         setStyleItemSelected(mCurSelectedEmojiStyleWrapper);
     }
 
-    private void updateEmojiStyle(EmojiStyleChangeListener.TYPE type, EmojiStyle style){
-        if(type == EmojiStyleChangeListener.TYPE.DELETE){
-            curPagerSelectedPosition = mViewPager.getCurrentItem();
-        }
+    private void updateEmojiStyle(EmojiStyleChangeListener.TYPE type,  EmojiStyleWrapper styleWrapper,int selectedPage){
         if(mStylesItemAdapter != null) {
             mStylesItemAdapter.notifyDataSetChanged();
         }
         if(mViewPagerAdapter!= null) {
             mViewPagerAdapter.notifyDataSetChanged();
         }
-        if(type == EmojiStyleChangeListener.TYPE.UPDATE){
-            mViewPager.setCurrentItem(curPagerSelectedPosition,false);
+        if(selectedPage != -1) {
+            mViewPager.setCurrentItem(selectedPage, false);
         }
     }
 
     class StyleChangeListener implements EmojiStyleChangeListener {
 
         @Override
-        public void update(final TYPE type, final EmojiStyle category) {
+        public void update(final TYPE type, final EmojiStyleWrapper styleWrapper, final int selectedPage) {
             if(EmojiUtil.isInMainThread()){
-                updateEmojiStyle(type,category);
+                updateEmojiStyle(type,styleWrapper,selectedPage);
             }else {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateEmojiStyle(type,category);
+                        updateEmojiStyle(type,styleWrapper,selectedPage);
                     }
                 });
             }
@@ -168,7 +164,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             ImageButton image = (ImageButton) holder.itemView;
-            EmojiStyleWrapper wrapper = (EmojiStyleWrapper) mEmojiStyleWrapperManager.wrapperMap.get(position);
+            EmojiStyleWrapper wrapper = mEmojiStyleWrapperManager.getStyleWrapperByStyleItem(position);
             int resourceId = wrapper.getStyleIcon();
             if( resourceId > 0){
                 image.setImageResource(resourceId);
@@ -183,7 +179,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
 
         @Override
         public int getItemCount() {
-            return mEmojiStyleWrapperManager.getStyleWrapperCounts();
+            return mEmojiStyleWrapperManager.getValidStyleWrapperCounts();
         }
 
         private class Holder extends RecyclerView.ViewHolder{
@@ -200,7 +196,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
 
         @Override
         public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-            EmojiStyleWrapper wrapper = (EmojiStyleWrapper) mEmojiStyleWrapperManager.wrapperMap.get(position);
+            EmojiStyleWrapper wrapper = mEmojiStyleWrapperManager.getStyleWrapperByStyleItem(position);
             String styleName =  wrapper.getStyleName();
             mViewPager.setCurrentItem(mEmojiStyleWrapperManager.getViewPageIndexByEmojiStyleName(styleName),false);
             updatePointsCounts(wrapper);
@@ -212,6 +208,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         mCurSelectedEmojiStyleWrapper = wrapper;
         mEmojiStyleWrapperManager.setSelectedStyleWrapper(wrapper);
         mStylesItemAdapter.notifyDataSetChanged();
+        mCurSelectedEmojiStyleWrapper.setCurDisplayPageIndex(mEmojiStyleWrapperManager.getPagerIndexAtStyleWrapperByVPPosition(mViewPager.getCurrentItem()));
     }
 
 
@@ -291,6 +288,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
 
             @Override
             public void onPageSelected(int position) {
+                mCurSelectedEmojiStyleWrapper.setCurDisplayPageIndex(mEmojiStyleWrapperManager.getPagerIndexAtStyleWrapperByVPPosition(position));
             }
 
             @Override

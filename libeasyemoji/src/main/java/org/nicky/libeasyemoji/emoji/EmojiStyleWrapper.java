@@ -16,6 +16,8 @@ public class EmojiStyleWrapper<T extends Parcelable> {
     private EmojiStyle style;
     private boolean isSelected;
     private List<PageEmojiStyle> pagerDataList;
+    //如果当前style被选中，curDisplayPageIndex >= 0 , 表示当前显示页在style中的索引
+    private int curDisplayPageIndex = -1;
 
     public EmojiStyleWrapper(EmojiStyle style){
         this.style = style;
@@ -85,6 +87,30 @@ public class EmojiStyleWrapper<T extends Parcelable> {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+        if(!isSelected){
+            curDisplayPageIndex = -1;
+        }else {
+            curDisplayPageIndex = 0;
+        }
     }
 
+    public void setCurDisplayPageIndex(int displayPageIndex){
+        curDisplayPageIndex = displayPageIndex;
+    }
+
+    public int getCurDisplayPageIndex() {
+        if(!isSelected){
+            return -1;
+        }
+        return curDisplayPageIndex;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof EmojiStyleWrapper){
+            EmojiStyleWrapper wrapper = (EmojiStyleWrapper) o;
+            return wrapper.getStyleName().equals(getStyleName());
+        }
+        return false;
+    }
 }

@@ -32,7 +32,9 @@ public class EmojiHandler {
     }
 
     public void addInterceptor(EmojiInterceptor interceptor) {
-        this.interceptors.add(interceptor);
+        if(!this.interceptors.contains(interceptor)) {
+            this.interceptors.add(interceptor);
+        }
     }
 
     public void handleEmojis(Context context, Spannable text, int emojiSize, int emojiAlignment,

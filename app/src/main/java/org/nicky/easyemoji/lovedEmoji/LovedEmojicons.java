@@ -126,10 +126,10 @@ public final class LovedEmojicons {
         }else {
             return;
         }
-        Set<Map.Entry<String,Integer>> sets= emojiconMap.entrySet();
-        for(Map.Entry<String,Integer> entry:sets){
-            emojicons.add(new Emoji(entry.getKey(),entry.getValue()));
-        }
+//        Set<Map.Entry<String,Integer>> sets= emojiconMap.entrySet();
+//        for(Map.Entry<String,Integer> entry:sets){
+//            emojicons.add(new Emoji(entry.getKey(),entry.getValue()));
+//        }
     }
 
     public List<Emoji> getEmojis(){

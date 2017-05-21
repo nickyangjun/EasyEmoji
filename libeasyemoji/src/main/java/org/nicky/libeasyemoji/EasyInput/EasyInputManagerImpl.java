@@ -169,6 +169,11 @@ public class EasyInputManagerImpl implements EasyInputManager {
             return this;
         }
 
+        public Builder addEmojiStyle(int position, EmojiStyle style){
+            manger.addEmojiStyle(position,style);
+            return this;
+        }
+
         public Builder deleteEmojiStyle(String tag){
             manger.deleteEmojiStyle(tag);
             return this;
