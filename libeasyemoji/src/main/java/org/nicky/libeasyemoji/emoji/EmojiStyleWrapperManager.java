@@ -215,10 +215,6 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
     public void updateStyle(EmojiStyle style) {
         int selectedItem = getAfterUpdateStyleVPItem(style);
         if(wrapperMap.containsKey(style.getStyleName())){
-            if(style.getEmojiData().size() == 0){
-                deleteEmojiStyle(style.getStyleName());
-                return;
-            }
             int index = wrapperMap.indexOf(style.getStyleName());
             deleteEmojiStyle(style.getStyleName());
             addEmojiStyle(index,style);
