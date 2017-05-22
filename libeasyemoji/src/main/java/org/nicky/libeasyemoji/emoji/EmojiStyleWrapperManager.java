@@ -130,8 +130,11 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
             EmojiHandler.getInstance().addInterceptor(style.getEmojiInterceptor());
         }
         if(styleChangeListener != null){
-            int curViewPagerItem = getViewPageIndexByEmojiStyleName(curSelectedEmojiStyleWrapper.getStyleName())
-                    +curSelectedEmojiStyleWrapper.getCurDisplayPageIndex();
+            int curViewPagerItem = -1;
+            if(curSelectedEmojiStyleWrapper != null) {
+                curViewPagerItem = getViewPageIndexByEmojiStyleName(curSelectedEmojiStyleWrapper.getStyleName())
+                        + curSelectedEmojiStyleWrapper.getCurDisplayPageIndex();
+            }
             styleChangeListener.update(EmojiStyleChangeListener.TYPE.ADD,wrapper,curViewPagerItem);
         }
     }
@@ -146,6 +149,9 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
             //默认会选中剩下的最后一项
             return -1;
         }else {
+            if(curSelectedEmojiStyleWrapper == null){
+                return -1;
+            }
             int curStyleIndex = wrapperMap.indexOf(curSelectedEmojiStyleWrapper.getStyleName());
             if(curStyleIndex == index){ //删除的是当前选中的项
                 //下一项的起始页
@@ -182,6 +188,9 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         int index = wrapperMap.indexOf(style.getStyleName());
         if(index == -1){
             return index;
+        }
+        if(curSelectedEmojiStyleWrapper == null){
+            return -1;
         }
         int curStyleIndex = wrapperMap.indexOf(curSelectedEmojiStyleWrapper.getStyleName());
         if(index < curStyleIndex){ //更新的项在当前显示的项前面
