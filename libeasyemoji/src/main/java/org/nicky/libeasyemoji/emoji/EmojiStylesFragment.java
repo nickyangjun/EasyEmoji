@@ -45,6 +45,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
     protected int mSpace; // 点与点间的距
     private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener;
     private EmojiStyleWrapper mCurSelectedEmojiStyleWrapper;
+    private int curPointsCounts; //当前的点数
 
     public static EmojiStylesFragment newInstance() {
         EmojiStylesFragment fragment = new EmojiStylesFragment();
@@ -213,15 +214,15 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
 
 
     private int updatePointsCounts(EmojiStyleWrapper wrapper){
-        final int pointsCounts = wrapper.getPagerCounts();
+        curPointsCounts = wrapper.getPagerCounts();
         int curPoints = mPointContainer.getChildCount();
-        if(curPoints == pointsCounts){
-            return pointsCounts;
+        if(curPoints == curPointsCounts){
+            return curPointsCounts;
         }
-        if(curPoints > pointsCounts){
-            mPointContainer.removeViews(pointsCounts-1,curPoints-pointsCounts);
+        if(curPoints > curPointsCounts){
+            mPointContainer.removeViews(curPointsCounts-1,curPoints-curPointsCounts);
         }else {
-            for(int i=0;i<pointsCounts-curPoints;i++){
+            for(int i=0;i<curPointsCounts-curPoints;i++){
                 ImageView imageView = new ImageView(getActivity());
                 imageView.setImageResource(R.drawable.shape_dot_normal);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -234,26 +235,26 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
             }
         }
         mCurSelectedEmojiStyleWrapper = wrapper;
-        if (pointsCounts <= 1) {
+        if (curPointsCounts <= 1) {
             mSelectedPoint.setVisibility(View.GONE);
             mPointContainer.setVisibility(View.GONE);
         } else {
             mSelectedPoint.setVisibility(View.VISIBLE);
             mPointContainer.setVisibility(View.VISIBLE);
         }
-        return pointsCounts;
+        return curPointsCounts;
     }
     /**
      * 初始化和viewpager关联的点
      */
     protected void initialPoints(EmojiStyleWrapper wrapper) {
         mSpace = 0;
-        final int pointsCounts = updatePointsCounts(wrapper);
+        updatePointsCounts(wrapper);
         mOnGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 // 当 UI的树布局改变时调用
-                if (pointsCounts <= 1) {
+                if (curPointsCounts <= 1) {
                     return;
                 }
                 if (mPointContainer.getChildAt(1) != null) {
