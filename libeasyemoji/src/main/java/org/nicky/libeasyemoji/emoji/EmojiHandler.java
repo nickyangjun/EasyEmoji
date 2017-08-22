@@ -10,6 +10,8 @@ import org.nicky.libeasyemoji.emoji.interfaces.Target;
 import org.nicky.libeasyemoji.emojicon.EmojiconSpan;
 import org.nicky.libeasyemoji.emojicon.Emojicons;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import java.util.List;
  */
 
 public class EmojiHandler {
-    List<EmojiInterceptor> interceptors = new LinkedList<>();
+    HashMap<String, EmojiInterceptor> interceptors = new LinkedHashMap<>();
 
     static class Holder {
         static final EmojiHandler INSTANCE = new EmojiHandler();
@@ -32,8 +34,8 @@ public class EmojiHandler {
     }
 
     public void addInterceptor(EmojiInterceptor interceptor) {
-        if(!this.interceptors.contains(interceptor)) {
-            this.interceptors.add(interceptor);
+        if(!this.interceptors.containsKey(interceptor.getClass().getSimpleName())) {
+            this.interceptors.put(interceptor.getClass().getSimpleName(),interceptor);
         }
     }
 
@@ -60,7 +62,7 @@ public class EmojiHandler {
             int icon = 0;
             char c = text.charAt(i);
 
-            for(EmojiInterceptor interceptor: interceptors){
+            for(EmojiInterceptor interceptor: interceptors.values()){
                 Target target = interceptor.intercept(text,i);
                 if(target!= null){
                     icon = target.getIcon();
