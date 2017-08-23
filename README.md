@@ -31,7 +31,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 ```xml
     dependencies {
-            compile 'com.github.nickyangjun:EasyEmoji:1.2.9'
+            compile 'com.github.nickyangjun:EasyEmoji:1.3.0'
     }
 ```
 
@@ -47,7 +47,7 @@ Or Maven:
     <dependency>
         <groupId>com.github.nickyangjun</groupId>
         <artifactId>EasyEmoji</artifactId>
-        <version>1.2.9</version>
+        <version>1.3.0</version>
     </dependency>
 ```
 
