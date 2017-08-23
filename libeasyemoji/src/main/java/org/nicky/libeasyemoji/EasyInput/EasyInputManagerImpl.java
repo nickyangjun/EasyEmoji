@@ -35,15 +35,37 @@ public class EasyInputManagerImpl implements EasyInputManager {
     private volatile Builder mBuilder;
 
     private EasyInputManagerImpl(Activity activity){
+        this(activity,false);
+    }
+
+    /**
+     *  注意manifest里面设置的属性会失效，默认被设置成：
+     *  WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+     *          | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_（HIDDEN or VISIBLE)
+     * @param activity
+     * @param isKeyboardShow 进入activity时，输入法默认是否显示
+     */
+    private EasyInputManagerImpl(Activity activity,boolean isKeyboardShow){
         mContext = activity;
         mKeyboardManager = new KeyboardManagerImpl(activity);
         mIPanelLayout = new IMEPanelLayout(activity,mKeyboardManager);
         mPanelContentManager = PanelContentManager.newInstance(mContext,mIPanelLayout);
-        mImeRootLayout = new IMERootLayout(activity,mKeyboardManager, mIPanelLayout.getPanel());
+        mImeRootLayout = new IMERootLayout(activity,mKeyboardManager, mIPanelLayout.getPanel(),isKeyboardShow);
     }
 
+    /**
+     * 调用此方法默认会关闭输入法, 注意manifest里面设置的属性会失效，默认被设置成
+     *      WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+     *          | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+     * @param activity
+     * @return
+     */
     public static EasyInputManager newInstance(Activity activity){
         return new EasyInputManagerImpl(activity);
+    }
+
+    public static EasyInputManager newInstance(Activity activity,boolean isKeyboardShow){
+        return new EasyInputManagerImpl(activity,isKeyboardShow);
     }
 
     @Override

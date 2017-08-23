@@ -36,12 +36,21 @@ class IMERootLayout extends RelativeLayout{
     private RootLayoutChangeHandler mRootLayoutChangeHandler;
     private  ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
-    public IMERootLayout(Context context,IKeyboardManager keyboardManager,IPanelLayout panelManager){
+    public IMERootLayout(Context context,IKeyboardManager keyboardManager,IPanelLayout panelManager,boolean isKeyboardShow){
         super(context);
         mContext = context;
         mKeyboardManager = keyboardManager;
         mWindow =  ((Activity)mContext).getWindow();
-        mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //设置activity输入法模式，必须要设置SOFT_INPUT_ADJUST_RESIZE
+
+        if(isKeyboardShow) {
+            mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }else {
+            mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
+
         mRootLayoutChangeHandler = new RootLayoutChangeHandler(this,panelManager,keyboardManager);
         setId(R.id.ime_root_container);
         setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,

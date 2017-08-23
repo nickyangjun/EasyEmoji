@@ -153,7 +153,8 @@
         android:orientation="horizontal"
         android:paddingBottom="2dp">
 
-        <org.nicky.libeasyemoji.emojicon.EmojiconEditText xmlns:Emojicon="http://schemas.android.com/apk/res-auto"
+        <org.nicky.libeasyemoji.emojicon.EmojiconEditText
+            xmlns:Emojicon="http://schemas.android.com/apk/res-auto"
             android:id="@+id/emoji_input_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

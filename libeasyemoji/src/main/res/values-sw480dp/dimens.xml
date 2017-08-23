@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="min_panel_height">245dp</dimen>
+    <dimen name="min_panel_height">250dp</dimen>
     <dimen name="max_panel_height">350dp</dimen>
 
     <dimen name="min_keyboard_height">80dp</dimen>

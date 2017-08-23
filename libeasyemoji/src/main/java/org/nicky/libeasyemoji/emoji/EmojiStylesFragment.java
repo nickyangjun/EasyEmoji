@@ -254,7 +254,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
             @Override
             public void onGlobalLayout() {
                 // 当 UI的树布局改变时调用
-                if (curPointsCounts <= 1) {
+                 if (curPointsCounts <= 1) {
                     return;
                 }
                 if (mPointContainer.getChildAt(1) != null) {
