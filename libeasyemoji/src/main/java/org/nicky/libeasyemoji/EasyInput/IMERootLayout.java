@@ -128,17 +128,22 @@ class IMERootLayout extends RelativeLayout{
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(!mAutoHideIME) {
-            return super.dispatchTouchEvent(ev);
-        }
-        if (ev.getAction() == MotionEvent.ACTION_DOWN && !super.dispatchTouchEvent(ev)) {
-            if((ev.getRawY() < ConvertUtil.getWindowHeightPX(mContext) - KeyboardManagerImpl.getKeyboardHeight(mContext) - mAutoHideOffsetPixel)
-                    &&(mPanelManager.isVisible() || mKeyboardManager.isKeyboardShowing())){
-                cancelIME();
-                return true;
+        try {
+            if(!mAutoHideIME) {
+                return super.dispatchTouchEvent(ev);
             }
+            if (ev.getAction() == MotionEvent.ACTION_DOWN && !super.dispatchTouchEvent(ev)) {
+                if((ev.getRawY() < ConvertUtil.getWindowHeightPX(mContext) - KeyboardManagerImpl.getKeyboardHeight(mContext) - mAutoHideOffsetPixel)
+                        &&(mPanelManager.isVisible() || mKeyboardManager.isKeyboardShowing())){
+                    cancelIME();
+                    return true;
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }catch (IllegalArgumentException ex){
+            ex.printStackTrace();
         }
-        return super.dispatchTouchEvent(ev);
+        return false;
     }
 
     public void addOnKeyboardIMEListener(OnKeyboardListener listener){
