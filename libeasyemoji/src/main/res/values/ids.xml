@@ -3,5 +3,6 @@
 
     <item name="ime_root_container" type="id"/>
     <item name="panel_container" type="id"/>
+    <item name="bottom_item_click" type="id"/>
 
 </resources>

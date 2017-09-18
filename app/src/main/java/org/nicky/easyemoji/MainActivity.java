@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.nicky.easyemoji.fragments.AttachFragment;
 import org.nicky.easyemoji.lovedEmoji.LovedEmojiStyle;
@@ -77,6 +78,26 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
         mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
         mEasyInputManager.getEmojiBuilder().addEmojiStyle(lovedEmoji);
+
+        TextView view  = new TextView(this);
+        view.setGravity(Gravity.CENTER);
+        view.setText("HAHA");
+        mEasyInputManager.getEmojiBuilder().addBottomTypeView(view, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        TextView view2  = new TextView(this);
+        view2.setGravity(Gravity.CENTER);
+        view2.setText("HAHA2");
+        mEasyInputManager.getEmojiBuilder().addBottomTypeView(view2, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH22",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         emojiconEditText.addTextChangedListener(new TextWatcher() {
             @Override

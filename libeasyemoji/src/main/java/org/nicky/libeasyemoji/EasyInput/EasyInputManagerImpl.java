@@ -191,6 +191,12 @@ public class EasyInputManagerImpl implements EasyInputManager {
             return this;
         }
 
+        //增加底部按钮view,比如搜索, 只会排在最后
+        public Builder addBottomTypeView(View view, View.OnClickListener listener){
+            manger.addBottomTypeView(view,listener);
+            return this;
+        }
+
         public Builder addEmojiStyle(int position, EmojiStyle style){
             manger.addEmojiStyle(position,style);
             return this;

@@ -3,10 +3,15 @@ package org.nicky.libeasyemoji.emoji;
 import android.app.Activity;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.view.View;
 
+import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyleChangeListener;
 import org.nicky.libeasyemoji.emojicon.utils.IndexLinkedHashMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nickyang on 2017/4/1.
@@ -14,6 +19,7 @@ import org.nicky.libeasyemoji.emojicon.utils.IndexLinkedHashMap;
 
 public class EmojiStyleWrapperManager<T extends Parcelable> {
     IndexLinkedHashMap<String,EmojiStyleWrapper> wrapperMap = new IndexLinkedHashMap<>();
+    public List<View> bottomTypeViews = new ArrayList<>(5);
     EmojiStyleChangeListener styleChangeListener;
     Activity activity;
     private EmojiStyleWrapper curSelectedEmojiStyleWrapper;
@@ -74,6 +80,20 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         return wrapper;
     }
 
+    //根据viewpager中的位置，得到被选择类目的表情在所有表情中的index
+    public int getEmojiStyleWrapperIndexByPosition(int position){
+        int counts = 0;
+        EmojiStyleWrapper wrapper = wrapperMap.get(0);
+        for(int i=0;i<wrapperMap.size();i++){
+            counts += wrapperMap.get(i).getPagerCounts();
+            if(counts > position){
+                wrapper = wrapperMap.get(i);
+                break;
+            }
+        }
+        return wrapperMap.indexOf(wrapper.getStyleName());
+    }
+
     //根据表情类目名得到它在viewpager中他的页面的开始index索引
     public int getViewPageIndexByEmojiStyleName(String styleName){
         int index = 0;
@@ -115,6 +135,19 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
 
     public  void addEmojiStyle(EmojiStyle style) {
         addEmojiStyle(wrapperMap.size(),style);
+    }
+
+    //增加底部按钮view,比如搜索
+    public void addBottomTypeView(View view, View.OnClickListener listener){
+        if(bottomTypeViews.contains(view)){
+            throw new RuntimeException("Cannot add the same view !!!");
+        }
+        view.setTag(R.id.bottom_item_click,listener);
+        bottomTypeViews.add(view);
+    }
+
+    public int getBottomTypeViewCounts(){
+        return bottomTypeViews.size();
     }
 
     public  void addEmojiStyle(int position, EmojiStyle style) {
