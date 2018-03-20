@@ -1,18 +1,17 @@
 package org.nicky.libeasyemoji.emoji;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.text.Spannable;
+import android.text.style.DynamicDrawableSpan;
 
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiInterceptor;
 import org.nicky.libeasyemoji.emoji.interfaces.Target;
 import org.nicky.libeasyemoji.emojicon.EmojiconSpan;
 import org.nicky.libeasyemoji.emojicon.Emojicons;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -49,11 +48,28 @@ public class EmojiHandler {
         int textLengthToProcessMax = textLength - index;
         int textLengthToProcess = (length < 0 || length > textLengthToProcessMax) ? textLength : length;
 
+        List<UserSpan> userSpanList = null;
         if(length>1) {
             EmojiconSpan[] oldSpans = text.getSpans(index, index + length, EmojiconSpan.class);
             for (int i = 0; i < oldSpans.length; i++) {
                 text.removeSpan(oldSpans[i]);
             }
+
+            DynamicDrawableSpan[] spans = text.getSpans(index,index+length,DynamicDrawableSpan.class);
+            if(spans.length >0) {
+                userSpanList = new ArrayList<>(spans.length);
+                for (int i = 0; i < spans.length; i++) {
+                    int start = text.getSpanStart(spans[i]);
+                    int end = text.getSpanEnd(spans[i]);
+                    userSpanList.add(new UserSpan(spans[i],start,end));
+                }
+            }
+
+        }
+
+        UserSpan first = null;
+        if(userSpanList != null && userSpanList.size() >0){
+            first = userSpanList.get(0);
         }
 
         int skip;
@@ -61,6 +77,17 @@ public class EmojiHandler {
             skip = 0;
             int icon = 0;
             char c = text.charAt(i);
+            if(first != null){
+                if(i == first.start){
+                    skip = first.end - first.start;
+                    userSpanList.remove(first);
+                    first = null;
+                    if(userSpanList.size()>0){
+                        first = userSpanList.get(0);
+                    }
+                    continue;
+                }
+            }
 
             for(EmojiInterceptor interceptor: interceptors.values()){
                 Target target = interceptor.intercept(text,i);
@@ -154,4 +181,17 @@ public class EmojiHandler {
             }
         }
     }
+
+    private class UserSpan{
+        DynamicDrawableSpan span;
+        int start;
+        int end;
+
+        UserSpan(DynamicDrawableSpan span, int start,int end){
+            this.span = span;
+            this.start = start;
+            this.end = end;
+        }
+    }
+
 }
