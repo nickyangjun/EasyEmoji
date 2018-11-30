@@ -307,12 +307,12 @@ public class KeyboardManagerImpl implements IKeyboardManager {
 
             } else {
 
-                final int phoneDisplayHeight = contentView.getResources().getDisplayMetrics().heightPixels;
-                if (!isTranslucentStatus &&
-                        phoneDisplayHeight == actionBarOverlayLayoutHeight) {
-                    return;
-
-                }
+                // TODO: 2018/11/29 nicky 修复华为mate20机器上判断键盘弹出不对bug, phoneDisplayHeight 一直等于 actionBarOverlayLayoutHeight
+//                final int phoneDisplayHeight = contentView.getResources().getDisplayMetrics().heightPixels;
+//                if (!isTranslucentStatus &&
+//                        phoneDisplayHeight == actionBarOverlayLayoutHeight) {
+//                    return;
+//                }
 
                 if (maxOverlayLayoutHeight == 0) {
                     // non-used.

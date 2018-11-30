@@ -64,6 +64,9 @@ public class EasyInputManagerImpl implements EasyInputManager {
         return new EasyInputManagerImpl(activity);
     }
 
+    /**
+     * @param isKeyboardShow  true 默认输入打开
+     */
     public static EasyInputManager newInstance(Activity activity,boolean isKeyboardShow){
         return new EasyInputManagerImpl(activity,isKeyboardShow);
     }

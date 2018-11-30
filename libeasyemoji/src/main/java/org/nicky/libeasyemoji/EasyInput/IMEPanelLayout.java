@@ -28,7 +28,7 @@ public class IMEPanelLayout extends FrameLayout implements IPanelLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mIsHide) {
+        if (mIsHide) { //键盘弹起或手动关闭panel
             setVisibility(View.GONE);
 
             widthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.EXACTLY);
@@ -42,6 +42,9 @@ public class IMEPanelLayout extends FrameLayout implements IPanelLayout {
         return !mIsHide;
     }
 
+    /**
+     * 键盘弹起时会被监听到，设置此值
+     */
     @Override
     public void setHide() {
         mIsHide = true;

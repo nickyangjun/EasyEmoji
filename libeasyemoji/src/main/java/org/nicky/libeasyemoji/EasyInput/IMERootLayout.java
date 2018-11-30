@@ -23,6 +23,9 @@ import org.nicky.libeasyemoji.R;
 
 /**
  * Created by yangjun1 on 2016/9/13.
+ *
+ * 最底层的布局，继承RelativeLayout， 上面放用户自定义的布局，下面放panel layout
+ *
  */
 class IMERootLayout extends RelativeLayout{
     private static final String TAG = IMERootLayout.class.getSimpleName();
@@ -73,19 +76,24 @@ class IMERootLayout extends RelativeLayout{
     }
 
     public void addPanelLayout(View panel){
+        //获取到activity默认的根content View
         ViewGroup contentLayout = (ViewGroup) ((Activity)mContext).findViewById(android.R.id.content);
+        //先移除根content View上用户自定义的布局
         View customRootView = contentLayout.getChildAt(0);
         contentLayout.removeView(customRootView);
         contentLayout.addView(this);
 
+        //设置用户自定义的布局在新的IMERootLayout中的布局参数
         panel.setId(R.id.panel_container);
         LayoutParams customRootParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         customRootParams.addRule(RelativeLayout.ABOVE,panel.getId());
         customRootView.setLayoutParams(customRootParams);
 
+        //设置panel layout在IMERootLayout中的布局参数, 先默认panel的高度是0
         LayoutParams panelParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0);
         panelParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         panel.setLayoutParams(panelParams);
+
         addView(panel);
         addView(customRootView);
         mPanelManager.closePanel();
