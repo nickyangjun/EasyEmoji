@@ -3,6 +3,7 @@ package org.nicky.libeasyemoji.EasyInput;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -219,6 +220,40 @@ public class EasyInputManagerImpl implements EasyInputManager {
 
         public Builder deleteEmojiStyle(String tag){
             manger.deleteEmojiStyle(tag);
+            return this;
+        }
+
+        /**
+         * 设置底部tab栏背景颜色
+         */
+        public Builder setTabViewBackgroundColor(int color){
+            manger.setTabViewBackgroundColor(color);
+            return this;
+        }
+
+        /**
+         * 设置底部tab栏分割线颜色， -1，去掉分割线
+         */
+        public Builder setTabViewDividerColor(int color){
+            manger.setTabViewDividerColor(color);
+            return this;
+        }
+
+        /**
+         * 设置表情指示器默认图片
+         * @return
+         */
+        public Builder setIndicatorDefaultImageResource(@DrawableRes int resId){
+            manger.setIndicatorDefaultImageResource(resId);
+            return this;
+        }
+
+        /**
+         * 设置表情指示器选中图片
+         * @return
+         */
+        public Builder setIndicatorSelectedImageResource(@DrawableRes int resId){
+            manger.setIndicatorSelectedImageResource(resId);
             return this;
         }
 

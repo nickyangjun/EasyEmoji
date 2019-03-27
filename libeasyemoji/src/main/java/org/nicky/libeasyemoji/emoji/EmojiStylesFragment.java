@@ -32,6 +32,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
 
     private FragmentManager mFragmentManager;
     private ViewPager mViewPager;
+    private View mdivider;
     private RecyclerView mStylesItemRecyclerView;
     private LinearLayoutManager mStylesItemLinearLayoutManager;
     private EmojiStyleWrapperManager mEmojiStyleWrapperManager;
@@ -61,6 +62,20 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         mStylesItemRecyclerView = (RecyclerView) view.findViewById(R.id.emoji_category_item);
         mPointContainer = (LinearLayout) view.findViewById(R.id.guide_point_container);
         mSelectedPoint = view.findViewById(R.id.guide_point_selected);
+        mdivider = view.findViewById(R.id.divider);
+        if(mEmojiStyleWrapperManager != null){
+            if(mEmojiStyleWrapperManager.getTabViewBackgroundColor() != -1) {
+                mStylesItemRecyclerView.setBackgroundColor(mEmojiStyleWrapperManager.getTabViewBackgroundColor());
+            }
+            if(mEmojiStyleWrapperManager.getTabViewDividerColor() == -1){
+                mdivider.setVisibility(View.GONE);
+            }else {
+                mdivider.setBackgroundColor(mEmojiStyleWrapperManager.getTabViewDividerColor());
+            }
+            if(mEmojiStyleWrapperManager.getIndicatorSelectedImageResource() > 0){
+                mSelectedPoint.setBackgroundResource(mEmojiStyleWrapperManager.getIndicatorSelectedImageResource());
+            }
+        }
         initData();
         return view;
     }
@@ -244,7 +259,11 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         }else {
             for(int i=0;i<curPointsCounts-curPoints;i++){
                 ImageView imageView = new ImageView(getActivity());
-                imageView.setImageResource(R.drawable.shape_dot_normal);
+                if(mEmojiStyleWrapperManager != null && mEmojiStyleWrapperManager.getIndicatorDefaultImageResource() > 0) {
+                    imageView.setBackgroundResource(mEmojiStyleWrapperManager.getIndicatorDefaultImageResource());
+                }else {
+                    imageView.setBackgroundResource(R.drawable.shape_dot_normal);
+                }
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT

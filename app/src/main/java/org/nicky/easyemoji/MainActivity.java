@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
         mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
         mEasyInputManager.getEmojiBuilder().addEmojiStyle(lovedEmoji);
+//        mEasyInputManager.getEmojiBuilder().setTabViewBackgroundColor(getResources().getColor(R.color.redE11644));
+//        mEasyInputManager.getEmojiBuilder().setTabViewDividerColor(getResources().getColor(R.color.redE11644));
+//        mEasyInputManager.getEmojiBuilder().setIndicatorDefaultImageResource(R.drawable.shape_indicator_dot_normal);
+//        mEasyInputManager.getEmojiBuilder().setIndicatorSelectedImageResource(R.drawable.shape_indicator_dot_selected);
 
 
         RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);

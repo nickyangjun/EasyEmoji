@@ -20,15 +20,17 @@ import java.util.List;
  */
 
 public class EmojiStyleWrapperManager<T extends Parcelable> {
-    IndexLinkedHashMap<String,EmojiStyleWrapper> wrapperMap = new IndexLinkedHashMap<>();
-    public List<ButtonViewTab> bottomTypeFrontViews = new ArrayList<>(2);  //放在普通表情前面的自定义按钮
-    public List<ButtonViewTab> bottomTypeViews = new ArrayList<>(2);//放在普通表情后面的自定义按钮
-
-    IndexLinkedHashMap<String,ViewTab> bottomViewTabMap = new IndexLinkedHashMap<>();
-
-    EmojiStyleChangeListener styleChangeListener;
-    Activity activity;
+    private IndexLinkedHashMap<String,EmojiStyleWrapper> wrapperMap = new IndexLinkedHashMap<>();
+    private List<ButtonViewTab> bottomTypeFrontViews = new ArrayList<>(2);  //放在普通表情前面的自定义按钮
+    private List<ButtonViewTab> bottomTypeViews = new ArrayList<>(2);//放在普通表情后面的自定义按钮
+    private IndexLinkedHashMap<String,ViewTab> bottomViewTabMap = new IndexLinkedHashMap<>();
+    private EmojiStyleChangeListener styleChangeListener;
+    private Activity activity;
     private EmojiStyleWrapper curSelectedEmojiStyleWrapper;
+    private int tabViewBackgroundColor = -1;  //底部tabView背景颜色
+    private int tabViewDividerColor = 0xffcccccc;  //底部tabView分割线颜色
+    private int indicatorDefaultImageResource;
+    private int indicatorSelectedImageResource;
 
 
     public EmojiStyleWrapperManager(Activity activity){
@@ -294,6 +296,38 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
 
     public void setEmojiStyleChangeListener(EmojiStyleChangeListener listener){
         styleChangeListener = listener;
+    }
+
+    public void setTabViewBackgroundColor(int color){
+        tabViewBackgroundColor = color;
+    }
+
+    public int getTabViewBackgroundColor() {
+        return tabViewBackgroundColor;
+    }
+
+    public void setTabViewDividerColor(int tabViewDividerColor) {
+        this.tabViewDividerColor = tabViewDividerColor;
+    }
+
+    public int getTabViewDividerColor() {
+        return tabViewDividerColor;
+    }
+
+    public void setIndicatorDefaultImageResource(int indicatorDefaultImageResource) {
+        this.indicatorDefaultImageResource = indicatorDefaultImageResource;
+    }
+
+    public int getIndicatorDefaultImageResource() {
+        return indicatorDefaultImageResource;
+    }
+
+    public void setIndicatorSelectedImageResource(int indicatorSelectedImageResource) {
+        this.indicatorSelectedImageResource = indicatorSelectedImageResource;
+    }
+
+    public int getIndicatorSelectedImageResource() {
+        return indicatorSelectedImageResource;
     }
 
     /**
