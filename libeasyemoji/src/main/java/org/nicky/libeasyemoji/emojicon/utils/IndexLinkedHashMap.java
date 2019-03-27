@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
  * Created by nickyang on 2017/3/27.
  */
 
-public class IndexLinkedHashMap<K,V> extends LinkedHashMap {
+public class IndexLinkedHashMap<K,V> extends LinkedHashMap<K, V> {
     private ArrayList<K> arrayList;
     int curIndex = 0;
 
@@ -27,7 +27,7 @@ public class IndexLinkedHashMap<K,V> extends LinkedHashMap {
         }else {
             arrayList.add(position,key);
             curIndex++;
-            v = (V) super.put(key,val);
+            v = super.put(key,val);
         }
         return v;
     }
@@ -36,11 +36,11 @@ public class IndexLinkedHashMap<K,V> extends LinkedHashMap {
         if(arrayList == null){
             return null;
         }
-        return (V) super.get(arrayList.get(index));
+        return super.get(arrayList.get(index));
     }
 
     @Override
-    public Object remove(Object key) {
+    public V remove(Object key) {
         if(arrayList.contains(key)) {
             arrayList.remove(key);
             curIndex--;

@@ -1,12 +1,17 @@
 package org.nicky.easyemoji;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -71,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasPer = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            if(hasPer != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+            }
+        }
+
+
         mEasyInputManager = EasyInputManagerImpl.newInstance(this);
         mEasyInputManager.addOnPanelListener(new changePanelListener());
         mEasyInputManager.addOnKeyboardIMEListener(new changeKeyboardListener());
@@ -79,9 +93,15 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
         mEasyInputManager.getEmojiBuilder().addEmojiStyle(lovedEmoji);
 
+
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        params.leftMargin = 30;
+        params.rightMargin = 30;
+
         TextView view  = new TextView(this);
         view.setGravity(Gravity.CENTER);
         view.setText("HAHA");
+        view.setLayoutParams(params);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,13 +109,65 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        RecyclerView.LayoutParams params2 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        params2.leftMargin = 30;
+        params2.rightMargin = 30;
+
         TextView view2  = new TextView(this);
         view2.setGravity(Gravity.CENTER);
         view2.setText("HAHA2");
+        view2.setLayoutParams(params2);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view2, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "HAHAHAHAH22",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        RecyclerView.LayoutParams params3 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        params3.leftMargin = 130;
+        params3.rightMargin = 130;
+
+        TextView view3  = new TextView(this);
+        view3.setGravity(Gravity.CENTER);
+        view3.setText("HAHA3");
+        view3.setLayoutParams(params3);
+        mEasyInputManager.getEmojiBuilder().addBottomTypeView(view3, true, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH3",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RecyclerView.LayoutParams params4 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        params4.leftMargin = 130;
+        params4.rightMargin = 130;
+
+        TextView view4  = new TextView(this);
+        view4.setGravity(Gravity.CENTER);
+        view4.setText("HAHA4");
+        view4.setLayoutParams(params4);
+        mEasyInputManager.getEmojiBuilder().addBottomTypeView(view4, true, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH4",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RecyclerView.LayoutParams params5 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        params5.leftMargin = 130;
+        params5.rightMargin = 130;
+
+        TextView view5  = new TextView(this);
+        view5.setGravity(Gravity.CENTER);
+        view5.setText("HAHA5");
+        view5.setLayoutParams(params5);
+        mEasyInputManager.getEmojiBuilder().addBottomTypeView(view5, true, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH5",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -136,10 +208,14 @@ public class MainActivity extends AppCompatActivity {
         emojiSwitch.setChecked(false);
     }
 
-    @OnClick({R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji,
+    @OnClick({R.id.open_dialog, R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji,
                 R.id.delete_a_emoji,R.id.add_a_emoji,R.id.publish,R.id.add_panel,R.id.delete_panel})
     void onClick(View view){
         switch (view.getId()){
+            case R.id.open_dialog: // TODO: 2019/3/22  未实现
+//                MsgSendDialog dialog = new MsgSendDialog();
+//                dialog.show(getSupportFragmentManager(), "dialog");
+                break;
             case R.id.open_keyboard:
                 mEasyInputManager.openKeyboard(emojiconEditText);
                 break;

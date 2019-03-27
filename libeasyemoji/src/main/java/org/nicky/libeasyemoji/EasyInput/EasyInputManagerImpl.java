@@ -194,9 +194,21 @@ public class EasyInputManagerImpl implements EasyInputManager {
             return this;
         }
 
-        //增加底部按钮view,比如搜索, 只会排在最后
+        /**
+         *增加底部按钮view,比如搜索
+         * @param front  true,  放在普通表情最前面，
+         *               false 放在普通表情最后面
+         */
+        public Builder addBottomTypeView(View view, boolean front, View.OnClickListener listener){
+            manger.addBottomTypeView(view, front, listener);
+            return this;
+        }
+
+        /**
+         *增加底部按钮view,比如搜索, 默认放在普通表情最后面
+         */
         public Builder addBottomTypeView(View view, View.OnClickListener listener){
-            manger.addBottomTypeView(view,listener);
+            manger.addBottomTypeView(view, false, listener);
             return this;
         }
 

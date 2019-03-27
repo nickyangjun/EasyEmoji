@@ -1,6 +1,7 @@
 package org.nicky.libeasyemoji.emoji;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.View;
 import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyleChangeListener;
+import org.nicky.libeasyemoji.emoji.interfaces.ViewTab;
 import org.nicky.libeasyemoji.emojicon.utils.IndexLinkedHashMap;
 
 import java.util.ArrayList;
@@ -19,7 +21,11 @@ import java.util.List;
 
 public class EmojiStyleWrapperManager<T extends Parcelable> {
     IndexLinkedHashMap<String,EmojiStyleWrapper> wrapperMap = new IndexLinkedHashMap<>();
-    public List<View> bottomTypeViews = new ArrayList<>(5);
+    public List<ButtonViewTab> bottomTypeFrontViews = new ArrayList<>(2);  //放在普通表情前面的自定义按钮
+    public List<ButtonViewTab> bottomTypeViews = new ArrayList<>(2);//放在普通表情后面的自定义按钮
+
+    IndexLinkedHashMap<String,ViewTab> bottomViewTabMap = new IndexLinkedHashMap<>();
+
     EmojiStyleChangeListener styleChangeListener;
     Activity activity;
     private EmojiStyleWrapper curSelectedEmojiStyleWrapper;
@@ -52,14 +58,20 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         return counts;
     }
 
+    //纠正表情的position, 因为表情前面有自定义view
+    private int calcPosition(int position){
+        return position - bottomTypeFrontViews.size();
+    }
+
     //获取emoji底部style的有效的EmojiStyleWrapper
     public EmojiStyleWrapper getStyleWrapperByStyleItem(int position){
+        int newPosition = calcPosition(position);
         int counts = -1;
         for(int i = 0;i<wrapperMap.size();i++){
-            if(wrapperMap.get(i).getPagerCounts()>0){
+            if(wrapperMap.get(i).getPagerCounts()>0){  //排除没有表情item的类目
                 counts ++;
             }
-            if(counts == position){
+            if(counts == newPosition){
                 return wrapperMap.get(i);
             }
         }
@@ -94,6 +106,11 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         return wrapperMap.indexOf(wrapper.getStyleName());
     }
 
+    //根据viewpager中的位置，得到被选择类目的表情在所有底部导航tab中的index
+    public int getEmojiStyleTabIndexByVPPosition(int position){
+        return bottomTypeFrontViews.size() + getEmojiStyleWrapperIndexByPosition(position);
+    }
+
     //根据表情类目名得到它在viewpager中他的页面的开始index索引
     public int getViewPageIndexByEmojiStyleName(String styleName){
         int index = 0;
@@ -120,7 +137,7 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         }
     }
 
-    //根据viewPager的position得到此pager在EmojiStyleWrapper中的位置
+    //根据viewPager的position得到此pager在它所属的EmojiStyleWrapper中的位置
     public int getPagerIndexAtStyleWrapperByVPPosition(int position){
         EmojiStyleWrapper wrapper = getEmojiStyleWrapperByPosition(position);
         int index = getViewPageIndexByEmojiStyleName(wrapper.getStyleName());
@@ -137,17 +154,24 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         addEmojiStyle(wrapperMap.size(),style);
     }
 
-    //增加底部按钮view,比如搜索
-    public void addBottomTypeView(View view, View.OnClickListener listener){
+    /**
+     *增加底部按钮view,比如搜索
+     * @param front  true,  放在普通表情最前面，
+     *               false 放在普通表情最后面
+     */
+    public void addBottomTypeView(View view, boolean front, View.OnClickListener listener){
         if(bottomTypeViews.contains(view)){
             throw new RuntimeException("Cannot add the same view !!!");
         }
         view.setTag(R.id.bottom_item_click,listener);
-        bottomTypeViews.add(view);
-    }
-
-    public int getBottomTypeViewCounts(){
-        return bottomTypeViews.size();
+        ButtonViewTab tab = new ButtonViewTab(view);
+        if(front){
+            bottomViewTabMap.add(bottomTypeFrontViews.size(), tab.getViewType(), tab);
+            bottomTypeFrontViews.add(tab);
+        }else {
+            bottomTypeViews.add(tab);
+            bottomViewTabMap.add(tab.getViewType(), tab);
+        }
     }
 
     public  void addEmojiStyle(int position, EmojiStyle style) {
@@ -162,6 +186,14 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         if(style.getEmojiInterceptor() != null){
             EmojiHandler.getInstance().addInterceptor(style.getEmojiInterceptor());
         }
+        // 有表情的表情tab要加入底部tab集合，用于显示此tab
+        if(wrapper.getPagerCounts()>0) {
+            if(!bottomViewTabMap.containsKey(wrapper.getViewType())) {
+                int tabPositon = bottomTypeFrontViews.size() + position;
+                bottomViewTabMap.add(tabPositon, wrapper.getViewType(), wrapper);
+            }
+        }
+
         if(styleChangeListener != null){
             int curViewPagerItem = -1;
             if(curSelectedEmojiStyleWrapper != null) {
@@ -206,6 +238,7 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         EmojiStyleWrapper wrapper = (EmojiStyleWrapper) wrapperMap.get(categoryName);
         if(wrapper != null){
             wrapperMap.remove(categoryName);
+            bottomViewTabMap.remove(wrapper.getViewType());
             if(styleChangeListener != null){
                 styleChangeListener.update(EmojiStyleChangeListener.TYPE.DELETE,wrapper,selectedItem);
             }
@@ -261,6 +294,21 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
 
     public void setEmojiStyleChangeListener(EmojiStyleChangeListener listener){
         styleChangeListener = listener;
+    }
+
+    /**
+     *  获取每一个 tab 的 view， 用于显示在表情的tab栏
+     */
+    public ViewTab getTabItemView(Context context, int viewType) {
+        return bottomViewTabMap.get(viewType+"");
+    }
+
+    public int getTabItemViewType(int position) {
+        return Integer.valueOf(bottomViewTabMap.get(position).getViewType());
+    }
+
+    public int getTabItemCounts(){
+        return bottomViewTabMap.size();
     }
 
 }

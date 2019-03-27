@@ -1,5 +1,8 @@
 package org.nicky.libeasyemoji.emojicon.emoji;
 
+import android.content.Context;
+import android.view.View;
+
 import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.EmojiFragment;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiInterceptor;
@@ -30,6 +33,11 @@ public class PeopleStyle implements EmojiStyle {
     @Override
     public int getStyleIcon() {
         return R.drawable.ic_emoji_smile;
+    }
+
+    @Override
+    public View getStyleIconView(Context context) {
+        return null;
     }
 
     @Override

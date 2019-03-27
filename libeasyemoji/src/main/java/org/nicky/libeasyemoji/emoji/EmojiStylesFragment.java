@@ -1,5 +1,6 @@
 package org.nicky.libeasyemoji.emoji;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,13 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyleChangeListener;
+import org.nicky.libeasyemoji.emoji.interfaces.ViewTab;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
 import org.nicky.libeasyemoji.emojicon.EmojiconFragment;
 import org.nicky.libeasyemoji.emojicon.interfaces.OnItemClickListener;
@@ -32,6 +33,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
     private FragmentManager mFragmentManager;
     private ViewPager mViewPager;
     private RecyclerView mStylesItemRecyclerView;
+    private LinearLayoutManager mStylesItemLinearLayoutManager;
     private EmojiStyleWrapperManager mEmojiStyleWrapperManager;
     private ViewPagerAdapter mViewPagerAdapter;
     private StylesItemAdapter mStylesItemAdapter;
@@ -73,13 +75,14 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         mViewPager.setAdapter(mViewPagerAdapter);
         BottomStyleManager bottomStyleManager = new BottomStyleManager(getContext(),mEmojiStyleWrapperManager);
         mStylesItemAdapter = new StylesItemAdapter(bottomStyleManager);
-        mStylesItemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        mStylesItemLinearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        mStylesItemRecyclerView.setLayoutManager(mStylesItemLinearLayoutManager);
         mStylesItemRecyclerView.setAdapter(mStylesItemAdapter);
         mEmojiStyleWrapperManager.setEmojiStyleChangeListener(new StyleChangeListener());
         //默认显示第一个表情类目
         mCurSelectedEmojiStyleWrapper = mEmojiStyleWrapperManager.getEmojiStyleWrapperByPosition(0);
         initialPoints(mCurSelectedEmojiStyleWrapper);
-        setStyleItemSelected(mCurSelectedEmojiStyleWrapper,0);
+        setStyleItemSelected(mCurSelectedEmojiStyleWrapper,mEmojiStyleWrapperManager.getEmojiStyleTabIndexByVPPosition(0));
     }
 
     private void updateEmojiStyle(EmojiStyleChangeListener.TYPE type,  EmojiStyleWrapper styleWrapper,int selectedPage){
@@ -160,26 +163,22 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = styleManager.onCreateViewHolder(parent,viewType);
-            return new Holder(view);
+            ViewTab eTabView = styleManager.onCreateViewHolder(parent,viewType);
+            return new Holder(parent.getContext(), eTabView);
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if(styleManager.getItemViewType(position) == BottomStyleManager.ITEM_EMOJ) {
-                ImageButton image = (ImageButton) holder.itemView;
-                EmojiStyleWrapper wrapper = mEmojiStyleWrapperManager.getStyleWrapperByStyleItem(position);
-                int resourceId = wrapper.getStyleIcon();
-                if (resourceId > 0) {
-                    image.setImageResource(resourceId);
-                }
+            Holder mHolder = (Holder) holder;
+            if(mHolder.eTabView.type() == ViewTab.T_EMOJI){
+                EmojiStyleWrapper wrapper = (EmojiStyleWrapper) mHolder.eTabView;
                 if (wrapper.isSelected()) {
-                    image.setSelected(true);
+                    mHolder.eTabView.setTabSelected(true);
                 } else {
-                    image.setSelected(false);
+                    mHolder.eTabView.setTabSelected(false);
                 }
-                holder.itemView.setOnClickListener(new ItemClick(holder, position));
-            }else {
+                holder.itemView.setOnClickListener(new ItemClick(mHolder, position));
+            }else if(mHolder.eTabView.type() == ViewTab.T_VIEW){
                 View.OnClickListener clickListener = (View.OnClickListener) holder.itemView.getTag(R.id.bottom_item_click);
                 if(clickListener != null) {
                     holder.itemView.setOnClickListener(clickListener);
@@ -198,20 +197,23 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         }
 
         private class Holder extends RecyclerView.ViewHolder{
-            public Holder(View itemView) {
-                super(itemView);
+            ViewTab eTabView;
+            public Holder(Context context, ViewTab eTabView) {
+                super(eTabView.getTabView(context));
+                this.eTabView = eTabView;
             }
         }
     }
 
     private class ItemClick extends OnItemClickListener {
-        public ItemClick(RecyclerView.ViewHolder holder, int position) {
+        public ItemClick(StylesItemAdapter.Holder holder, int position) {
             super(holder, position);
         }
 
         @Override
         public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-            EmojiStyleWrapper wrapper = mEmojiStyleWrapperManager.getStyleWrapperByStyleItem(position);
+            StylesItemAdapter.Holder mHolder = (StylesItemAdapter.Holder) holder;
+            EmojiStyleWrapper wrapper = (EmojiStyleWrapper) mHolder.eTabView;
             String styleName =  wrapper.getStyleName();
             mViewPager.setCurrentItem(mEmojiStyleWrapperManager.getViewPageIndexByEmojiStyleName(styleName),false);
             updatePointsCounts(wrapper);
@@ -230,7 +232,6 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         mStylesItemRecyclerView.smoothScrollToPosition(stylePosition);
         mCurSelectedEmojiStyleWrapper.setCurDisplayPageIndex(mEmojiStyleWrapperManager.getPagerIndexAtStyleWrapperByVPPosition(mViewPager.getCurrentItem()));
     }
-
 
     private int updatePointsCounts(EmojiStyleWrapper wrapper){
         curPointsCounts = wrapper.getPagerCounts();
@@ -296,7 +297,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
                                 .getLayoutParams();
                 EmojiStyleWrapper wrapper = mEmojiStyleWrapperManager.getEmojiStyleWrapperByPosition(position);
                 if(wrapper != mCurSelectedEmojiStyleWrapper){
-                    setStyleItemSelected(wrapper, mEmojiStyleWrapperManager.getEmojiStyleWrapperIndexByPosition(position));
+                    setStyleItemSelected(wrapper, mEmojiStyleWrapperManager.getEmojiStyleTabIndexByVPPosition(position));
                 }
                 updatePointsCounts(wrapper);
                 int index = mEmojiStyleWrapperManager.getPagerIndexAtStyleWrapperByVPPosition(position);

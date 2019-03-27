@@ -40,4 +40,8 @@ public class Utils {
         return isHandleByPlaceholder(ViewUtil.isFullScreen(activity),
                 ViewUtil.isTranslucentStatus(activity), ViewUtil.isFitsSystemWindows(activity));
     }
+
+    public static int getScreenWidth(Context context){
+        return context.getResources().getDisplayMetrics().widthPixels;
+    }
 }

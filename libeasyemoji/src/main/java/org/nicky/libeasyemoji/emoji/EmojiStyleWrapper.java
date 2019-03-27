@@ -1,20 +1,33 @@
 package org.nicky.libeasyemoji.emoji;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Parcelable;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
 import org.nicky.libeasyemoji.emoji.interfaces.PageEmojiStyle;
+import org.nicky.libeasyemoji.emoji.interfaces.ViewTab;
+import org.nicky.libeasyemoji.emojicon.utils.EmojiUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by nickyang on 2017/4/1.
+ *
+ * 表示一类表情
  */
 
-public class EmojiStyleWrapper<T extends Parcelable> {
+public class EmojiStyleWrapper<T extends Parcelable> implements ViewTab{
+    private View tabItemView;
     private EmojiStyle style;
     private boolean isSelected;
+    /**
+     * 表情的所有分页
+     */
     private List<PageEmojiStyle> pagerDataList;
     //如果当前style被选中，curDisplayPageIndex >= 0 , 表示当前显示页在style中的索引
     private int curDisplayPageIndex = -1;
@@ -77,12 +90,43 @@ public class EmojiStyleWrapper<T extends Parcelable> {
         return style.getStyleName();
     }
 
-    public int getStyleIcon(){
-        return style.getStyleIcon();
+    @Override
+    public String getViewType() {
+        return hashCode()+"";
     }
 
     public boolean isSelected() {
         return isSelected;
+    }
+
+    @Override
+    public int type() {
+        return ViewTab.T_EMOJI;
+    }
+
+    /**
+     * 底部tab的图标View，tab 被选中时会调用view的 selected 事件
+     */
+    @Override
+    public View getTabView(Context context) {
+        if(tabItemView != null) return tabItemView;
+        tabItemView = style.getStyleIconView(context);
+        if(tabItemView == null){
+            ImageButton imageView = new ImageButton(context);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(EmojiUtil.dip2px(context, 40), ViewGroup.LayoutParams.MATCH_PARENT));
+            imageView.setBackgroundColor(Color.WHITE);
+            int resourceId = style.getStyleIcon();
+            if (resourceId > 0) {
+                imageView.setImageResource(resourceId);
+            }
+            tabItemView = imageView;
+        }
+        return tabItemView;
+    }
+
+    @Override
+    public void setTabSelected(boolean selected) {
+        tabItemView.setSelected(selected);
     }
 
     public void setSelected(boolean selected) {
