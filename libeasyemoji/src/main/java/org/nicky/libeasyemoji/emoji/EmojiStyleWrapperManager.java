@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.interfaces.EmojiStyle;
@@ -156,6 +157,27 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         addEmojiStyle(wrapperMap.size(),style);
     }
 
+    private void updateBottomViewTab(){
+        bottomViewTabMap.clear();
+        //先添加前面的自定义view
+        for(ButtonViewTab tab : bottomTypeFrontViews){
+            bottomViewTabMap.add(tab.getViewType(), tab);
+        }
+
+        //添加表情
+        for(int i=0;i<wrapperMap.size();i++){
+            EmojiStyleWrapper wrapper = wrapperMap.get(i);
+            if(wrapper.getPagerCounts() > 0){
+                bottomViewTabMap.add(wrapper.getViewType(), wrapper);
+            }
+        }
+
+        //添加最后的自定义view
+        for(ButtonViewTab tab : bottomTypeViews){
+            bottomViewTabMap.add(tab.getViewType(), tab);
+        }
+    }
+
     /**
      *增加底部按钮view,比如搜索
      * @param front  true,  放在普通表情最前面，
@@ -168,11 +190,14 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         view.setTag(R.id.bottom_item_click,listener);
         ButtonViewTab tab = new ButtonViewTab(view);
         if(front){
-            bottomViewTabMap.add(bottomTypeFrontViews.size(), tab.getViewType(), tab);
             bottomTypeFrontViews.add(tab);
         }else {
             bottomTypeViews.add(tab);
-            bottomViewTabMap.add(tab.getViewType(), tab);
+        }
+        updateBottomViewTab();
+
+        if(styleChangeListener != null){
+            styleChangeListener.update(EmojiStyleChangeListener.TYPE.ADD, null,-1);
         }
     }
 
@@ -188,13 +213,8 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
         if(style.getEmojiInterceptor() != null){
             EmojiHandler.getInstance().addInterceptor(style.getEmojiInterceptor());
         }
-        // 有表情的表情tab要加入底部tab集合，用于显示此tab
-        if(wrapper.getPagerCounts()>0) {
-            if(!bottomViewTabMap.containsKey(wrapper.getViewType())) {
-                int tabPositon = bottomTypeFrontViews.size() + position;
-                bottomViewTabMap.add(tabPositon, wrapper.getViewType(), wrapper);
-            }
-        }
+
+        updateBottomViewTab();
 
         if(styleChangeListener != null){
             int curViewPagerItem = -1;
@@ -333,7 +353,7 @@ public class EmojiStyleWrapperManager<T extends Parcelable> {
     /**
      *  获取每一个 tab 的 view， 用于显示在表情的tab栏
      */
-    public ViewTab getTabItemView(Context context, int viewType) {
+    public ViewTab getTabItemView(Context context, ViewGroup parent, int viewType) {
         return bottomViewTabMap.get(viewType+"");
     }
 

@@ -2,6 +2,7 @@ package org.nicky.libeasyemoji.emoji;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -100,7 +101,7 @@ public class EmojiStylesFragment extends Fragment implements EmojiconFragment.On
         setStyleItemSelected(mCurSelectedEmojiStyleWrapper,mEmojiStyleWrapperManager.getEmojiStyleTabIndexByVPPosition(0));
     }
 
-    private void updateEmojiStyle(EmojiStyleChangeListener.TYPE type,  EmojiStyleWrapper styleWrapper,int selectedPage){
+    private void updateEmojiStyle(EmojiStyleChangeListener.TYPE type, @Nullable EmojiStyleWrapper styleWrapper, int selectedPage){
         if(mStylesItemAdapter != null) {
             mStylesItemAdapter.notifyDataSetChanged();
         }

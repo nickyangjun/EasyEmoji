@@ -25,6 +25,9 @@ public class IndexLinkedHashMap<K,V> extends LinkedHashMap<K, V> {
         if(position>=curIndex){
             v = add(key,val);
         }else {
+            if(arrayList == null){
+                arrayList = new ArrayList<>();
+            }
             arrayList.add(position,key);
             curIndex++;
             v = super.put(key,val);
@@ -41,6 +44,7 @@ public class IndexLinkedHashMap<K,V> extends LinkedHashMap<K, V> {
 
     @Override
     public V remove(Object key) {
+        if(arrayList == null) return null;
         if(arrayList.contains(key)) {
             arrayList.remove(key);
             curIndex--;
@@ -50,10 +54,20 @@ public class IndexLinkedHashMap<K,V> extends LinkedHashMap<K, V> {
     }
 
     public int indexOf(K key){
+        if(arrayList == null) return -1;
         int index = arrayList.indexOf(key);
         if(index>=0 && super.containsKey(key)){
             return index;
         }
         return -1;
+    }
+
+    @Override
+    public void clear() {
+        curIndex = 0;
+        if(arrayList != null) {
+            arrayList.clear();
+        }
+        super.clear();
     }
 }

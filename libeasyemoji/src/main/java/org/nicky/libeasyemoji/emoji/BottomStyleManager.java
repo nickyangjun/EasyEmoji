@@ -22,7 +22,7 @@ public class BottomStyleManager {
     }
 
     ViewTab onCreateViewHolder(ViewGroup parent, int viewType) {
-        return styleWrapperManager.getTabItemView(context, viewType);
+        return styleWrapperManager.getTabItemView(context, parent, viewType);
     }
 
     public int getItemCount() {

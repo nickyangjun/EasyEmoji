@@ -1,5 +1,7 @@
 package org.nicky.libeasyemoji.emoji.interfaces;
 
+import android.support.annotation.Nullable;
+
 import org.nicky.libeasyemoji.emoji.EmojiStyleWrapper;
 
 /**
@@ -12,5 +14,5 @@ public interface EmojiStyleChangeListener {
         DELETE,
         UPDATE
     }
-    void update(TYPE type, EmojiStyleWrapper styleWrapper,int selectedPage);
+    void update(TYPE type, @Nullable EmojiStyleWrapper styleWrapper, int selectedPage);
 }
