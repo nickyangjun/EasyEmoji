@@ -75,7 +75,7 @@ public class RootLayoutChangeHandler {
 
         if (offset > 0) {   //键盘弹起 (offset > 0，高度变小)
             mPanelManager.setHide();
-        } else if (mKeyboardManager.isKeyboardShowing()) {
+        } else if (mKeyboardManager.isKeyboardShowing() || mPanelManager.isVisible()) {
             // 1. 总得来说，在监听到键盘已经显示的前提下，键盘收回才是有效有意义的。
             // 2. 修复在Android L下使用V7.Theme.AppCompat主题，进入Activity，默认弹起面板bug，
             // 第2点的bug出现原因:在Android L下使用V7.Theme.AppCompat主题，并且不使用系统的ActionBar/ToolBar，V7.Theme.AppCompat主题,还是会先默认绘制一帧默认ActionBar，然后再将他去掉（略无语）
