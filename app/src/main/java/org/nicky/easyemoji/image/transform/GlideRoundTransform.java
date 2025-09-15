@@ -13,8 +13,6 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.security.MessageDigest;
 
 /**
@@ -108,7 +106,7 @@ public class GlideRoundTransform extends BitmapTransformation {
     }
 
     @Override
-    protected Bitmap transform(@NotNull BitmapPool pool, @NotNull Bitmap toTransform, int outWidth, int outHeight) {
+    protected Bitmap transform( BitmapPool pool,  Bitmap toTransform, int outWidth, int outHeight) {
         Bitmap bitmap = TransformationUtils.centerCrop(pool, toTransform, outWidth, outHeight);
         return roundCrop(pool, bitmap);
     }
@@ -136,7 +134,7 @@ public class GlideRoundTransform extends BitmapTransformation {
     }
 
     @Override
-    public void updateDiskCacheKey(@NotNull MessageDigest messageDigest) {
+    public void updateDiskCacheKey( MessageDigest messageDigest) {
 
     }
 }
