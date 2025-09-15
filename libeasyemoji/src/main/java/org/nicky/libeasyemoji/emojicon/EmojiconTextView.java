@@ -18,11 +18,12 @@ package org.nicky.libeasyemoji.emojicon;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import org.nicky.libeasyemoji.R;
 import org.nicky.libeasyemoji.emoji.EmojiHandler;
@@ -73,7 +74,7 @@ public class EmojiconTextView extends AppCompatTextView {
     }
 
     @Override
-    public void setText(CharSequence text, BufferType type) {
+    public void setText(CharSequence text, TextView.BufferType type) {
         if (!TextUtils.isEmpty(text)) {
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
             EmojiHandler.getInstance().handleEmojis(getContext(), builder, mEmojiconSize, mEmojiconAlignment,

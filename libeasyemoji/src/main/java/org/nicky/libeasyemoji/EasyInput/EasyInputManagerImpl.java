@@ -3,9 +3,9 @@ package org.nicky.libeasyemoji.EasyInput;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.DrawableRes;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 

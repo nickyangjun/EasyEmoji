@@ -1,6 +1,6 @@
 package org.nicky.libeasyemoji.emoji.interfaces;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.nicky.libeasyemoji.emoji.EmojiStyleWrapper;
 

@@ -3,8 +3,8 @@ package org.nicky.easyemoji;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,18 +20,11 @@ import org.nicky.libeasyemoji.EasyInput.EasyInputManagerImpl;
 import org.nicky.libeasyemoji.EasyInput.interfaces.EasyInputManager;
 import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
 
 public class MsgSendDialog extends DialogFragment {
 
-    @BindView(R.id.send_edt)
     EmojiconEditText emojiconEditText;
-    @BindView(R.id.inputbox_emoji)
     CheckBox emojiSwitch;
-    @BindView(R.id.lv_msg_send)
     LinearLayout lvSend;
 
     private Context context;
@@ -52,7 +45,6 @@ public class MsgSendDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
             savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_msg_send, container, false);
-        ButterKnife.bind(this, view);
         initEmoji();
         return view;
     }
@@ -63,7 +55,6 @@ public class MsgSendDialog extends DialogFragment {
         mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
     }
 
-    @OnClick(R.id.inputbox_emoji)
     void switchEmoji() {
         if (emojiSwitch.isChecked()) {
             mEasyInputManager.openPanel("emoji");
@@ -72,17 +63,14 @@ public class MsgSendDialog extends DialogFragment {
         }
     }
 
-    //    @OnClick(R.id.view)
 //    public void clickWhiteView() {
 //        dismiss();
 //    }
 
-    @OnTextChanged(value = R.id.send_edt, callback = OnTextChanged.Callback.TEXT_CHANGED)
     public void onTextChanged(CharSequence c, int i1, int i2, int i3) {
 
     }
 
-    @OnClick(R.id.publish)
     public void sendMoment() {
         String strMoment = emojiconEditText.getText().toString().trim();
         if (TextUtils.isEmpty(strMoment)) {

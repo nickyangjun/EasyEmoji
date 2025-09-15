@@ -18,7 +18,7 @@ package org.nicky.libeasyemoji.emojicon;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 

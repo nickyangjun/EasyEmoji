@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -29,41 +29,24 @@ import org.nicky.libeasyemoji.emojicon.EmojiconEditText;
 import org.nicky.libeasyemoji.emojicon.emoji.Emojicon;
 import org.nicky.libeasyemoji.emojicon.emoji.ObjectsStyle;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+// ButterKnife removed - using findViewById instead
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.emoji_input_txt)
     EmojiconEditText emojiconEditText;
-    @BindView(R.id.emojicon_switch)
     CheckBox emojiSwitch;
-    @BindView(R.id.close_keyboard)
     Button closeKeyboard;
-    @BindView(R.id.open_keyboard)
     Button openKeyboard;
-    @BindView(R.id.close_panel)
     Button closePanel;
-    @BindView(R.id.open_panel)
     Button openPanel;
-    @BindView(R.id.add_panel)
     Button addPanel;
-    @BindView(R.id.delete_panel)
     Button deletePanel;
-    @BindView(R.id.attach)
     ImageView attach;
-    @BindView(R.id.add_emoji)
     Button addEmoji;
-    @BindView(R.id.delete_emoji)
     Button deleteEmoji;
-    @BindView(R.id.add_a_emoji)
     Button addOneEmoji;
-    @BindView(R.id.delete_a_emoji)
     Button deleteOneEmoji;
-    @BindView(R.id.publish)
     TextView publish;
-    @BindView(R.id.emoji_txt)
     TextView txt;
 
     protected EasyInputManager mEasyInputManager;
@@ -74,8 +57,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        
+        // Initialize views manually (ButterKnife removed)
+        emojiconEditText = findViewById(R.id.emoji_input_txt);
+        emojiSwitch = findViewById(R.id.emojicon_switch);
+        closeKeyboard = findViewById(R.id.close_keyboard);
+        openKeyboard = findViewById(R.id.open_keyboard);
+        closePanel = findViewById(R.id.close_panel);
+        openPanel = findViewById(R.id.open_panel);
+        addPanel = findViewById(R.id.add_panel);
+        deletePanel = findViewById(R.id.delete_panel);
+        attach = findViewById(R.id.attach);
+        addEmoji = findViewById(R.id.add_emoji);
+        publish = findViewById(R.id.publish);
 
+        // Set click listeners (replacing @OnClick annotations)
+        emojiSwitch.setOnClickListener(v -> switchEmoji());
+        attach.setOnClickListener(v -> attach());
+        closeKeyboard.setOnClickListener(this::onClick);
+        openKeyboard.setOnClickListener(this::onClick);
+        closePanel.setOnClickListener(this::onClick);
+        openPanel.setOnClickListener(this::onClick);
+        addPanel.setOnClickListener(this::onClick);
+        deletePanel.setOnClickListener(this::onClick);
+        addEmoji.setOnClickListener(this::onClick);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasPer = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -197,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.emojicon_switch)
     void switchEmoji() {
         if (emojiSwitch.isChecked()) {
             mEasyInputManager.openPanel("emoji");
@@ -206,14 +210,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.attach)
     void attach(){
         mEasyInputManager.openPanel("attach");
         emojiSwitch.setChecked(false);
     }
 
-    @OnClick({R.id.open_dialog, R.id.open_panel,R.id.close_panel,R.id.open_keyboard,R.id.close_keyboard,R.id.add_emoji,R.id.delete_emoji,
-                R.id.delete_a_emoji,R.id.add_a_emoji,R.id.publish,R.id.add_panel,R.id.delete_panel})
     void onClick(View view){
         switch (view.getId()){
             case R.id.open_dialog: // TODO: 2019/3/22  未实现

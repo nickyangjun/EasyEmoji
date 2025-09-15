@@ -6,7 +6,7 @@ import android.content.CursorLoader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +29,7 @@ public class ImageModel {
 
 
     //本地图库加载器
-    public static class AttachPhotoLoaderCallback implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
+    public static class AttachPhotoLoaderCallback implements androidx.loader.app.LoaderManager.LoaderCallbacks<Cursor> {
 
         private Context mContext;
         private LocalImgAdapter adapter;
@@ -41,8 +41,8 @@ public class ImageModel {
         }
 
         @Override
-        public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            return new android.support.v4.content.CursorLoader( mContext,
+        public androidx.loader.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new androidx.loader.content.CursorLoader( mContext,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     IMAGE_PROJECTION,
                     "",
@@ -55,7 +55,7 @@ public class ImageModel {
         }
 
         @Override
-        public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
+        public void onLoadFinished(androidx.loader.content.Loader<Cursor> loader, Cursor cursor) {
             if (cursor != null && cursor.getCount() > 0) {
                 ArrayList<String> images = new ArrayList<>();
                 cursor.moveToFirst();
@@ -71,7 +71,7 @@ public class ImageModel {
         }
 
         @Override
-        public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+        public void onLoaderReset(androidx.loader.content.Loader<Cursor> loader) {
 
         }
     }

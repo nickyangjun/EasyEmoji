@@ -2,11 +2,20 @@
 
 buildscript {
     repositories {
-        jcenter()
+        google()
+        //jcenter 已经不能访问了
+        maven {url 'https://maven.aliyun.com/repository/public'}
+        all { ArtifactRepository repo ->
+            if(repo instanceof MavenArtifactRepository){
+                def url = repo.url.toString()
+                if (url.startsWith('https://jcenter.bintray.com/')) {
+                    remove repo
+                }
+            }
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.android.tools.build:gradle:7.4.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,7 +24,18 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        google()
+        //jcenter 已经不能访问了
+        maven {url 'https://maven.aliyun.com/repository/public'}
+        all { ArtifactRepository repo ->
+            if(repo instanceof MavenArtifactRepository){
+                def url = repo.url.toString()
+                if (url.startsWith('https://jcenter.bintray.com/')) {
+                    remove repo
+                }
+            }
+        }
+        maven { url 'https://jitpack.io' }
     }
 }
 

@@ -18,7 +18,7 @@ package org.nicky.libeasyemoji.emojicon.emoji;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import android.text.style.DynamicDrawableSpan;
 
 import java.lang.annotation.Retention;

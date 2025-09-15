@@ -1,6 +1,6 @@
 package org.nicky.libeasyemoji.EasyInput.interfaces;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.View;
 
 import org.nicky.libeasyemoji.EasyInput.EasyInputManagerImpl;
