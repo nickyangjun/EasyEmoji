@@ -370,6 +370,11 @@ public class KeyboardManagerImpl implements IKeyboardManager {
             int keyboardHeight = imeInsets.bottom;
             boolean isKeyboardVisible = keyboardHeight > 0;
 
+            // 先保存键盘高度，占位panel需要这个高度
+            if (isKeyboardVisible && keyboardHeight > getMinKeyboardHeight(mContext)) {
+                saveKeyboardHeight(mContext, keyboardHeight);
+            }
+
             // 键盘状态发生变化
             if (mIsKeyboardShowing != isKeyboardVisible) {
                 setKeyboardShowing(isKeyboardVisible);
@@ -385,11 +390,6 @@ public class KeyboardManagerImpl implements IKeyboardManager {
                         // 键盘隐藏：隐藏Panel占位
                         hidePanelPlaceholder(target);
                     }
-                }
-
-                // 保存键盘高度
-                if (isKeyboardVisible && keyboardHeight > getMinKeyboardHeight(mContext)) {
-                    saveKeyboardHeight(mContext, keyboardHeight);
                 }
 
                 // 通知监听器
