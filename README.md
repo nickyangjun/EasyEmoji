@@ -1,7 +1,9 @@
 # EasyEmoji
 Add emoji so easy
 
-让你的App添加表情最简单，最快速，并且无需更改原有activity布局。
+让你的App添加表情最简单，最快速，并且无需更改原有activity布局。 
+
+最新版 1.4.0，适配了 Android api 35
 
 <img src="./screenshot/02.gif" width="320" height="480">
 
