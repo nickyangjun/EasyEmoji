@@ -44,4 +44,22 @@ public class Utils {
     public static int getScreenWidth(Context context){
         return context.getResources().getDisplayMetrics().widthPixels;
     }
+
+    /**
+     * 判断是否应该使用 API 35+ 模式
+     * 需要同时满足：系统版本 >= 35 且应用 targetSdkVersion >= 35
+     */
+    public static boolean shouldUseApi35Mode(Context context) {
+        if (android.os.Build.VERSION.SDK_INT < 35) {
+            return false;
+        }
+
+        try {
+            int targetSdkVersion = context.getApplicationInfo().targetSdkVersion;
+            return targetSdkVersion >= 35;
+        } catch (Exception e) {
+            // 如果获取失败，默认使用传统模式
+            return false;
+        }
+    }
 }

@@ -148,8 +148,10 @@ public class KeyboardManagerImpl implements IKeyboardManager {
                                                           OnKeyboardListener listener) {
         final ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
 
-        // 检查是否是 API 35+
-        if (Build.VERSION.SDK_INT >= 35) {
+        // 检查是否需要使用 API 35+ 模式
+        // 需要同时满足：系统版本 >= 35 且应用 targetSdkVersion >= 35
+        boolean shouldUseApi35Mode = Utils.shouldUseApi35Mode(activity);
+        if (shouldUseApi35Mode) {
             mIsApi35Mode = true;
             setupApi35KeyboardDetection(activity, contentView, target, listener);
         }

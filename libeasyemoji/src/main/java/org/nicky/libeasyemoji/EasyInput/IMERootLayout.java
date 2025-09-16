@@ -18,6 +18,7 @@ import org.nicky.libeasyemoji.EasyInput.interfaces.IKeyboardManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.IPanelLayout;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
 import org.nicky.libeasyemoji.EasyInput.utils.ConvertUtil;
+import org.nicky.libeasyemoji.EasyInput.utils.Utils;
 import org.nicky.libeasyemoji.R;
 
 
@@ -45,10 +46,11 @@ class IMERootLayout extends RelativeLayout{
         mKeyboardManager = keyboardManager;
         mWindow =  ((Activity)mContext).getWindow();
         //设置activity输入法模式
-        // API 35+ 使用 ADJUST_NOTHING，配合WindowInsets API
-        // API < 35 使用传统的 ADJUST_RESIZE
+        // 根据应用的 targetSdkVersion 决定使用哪种模式
+        // 只有当系统版本 >= 35 且应用 targetSdkVersion >= 35 时才使用新的 ADJUST_NOTHING 模式
         int adjustMode;
-        if (android.os.Build.VERSION.SDK_INT >= 35) {
+        boolean shouldUseApi35Mode = Utils.shouldUseApi35Mode(context);
+        if (shouldUseApi35Mode) {
             adjustMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
         } else {
             adjustMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
