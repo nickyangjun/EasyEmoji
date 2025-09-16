@@ -21,6 +21,10 @@ public class IMEPanelLayout extends FrameLayout implements IPanelLayout {
     private boolean mIsHide = false;
     IKeyboardManager mKeyboardManager;
 
+    //api 35以后，键盘弹出不在改变整体activity布局，
+    // 所以键盘弹出后会自动打开Panel，撑起底部输入框，此标志用于表明是否键盘弹出自动占位
+    boolean api35PlaceHolderOpen = false;
+
     public IMEPanelLayout(@NonNull Context context, IKeyboardManager keyboardManager) {
         super(context);
         mKeyboardManager = keyboardManager;
@@ -66,7 +70,8 @@ public class IMEPanelLayout extends FrameLayout implements IPanelLayout {
             return true;
         }
 
-        if (mKeyboardManager.isKeyboardShowing() && visibility == View.VISIBLE) {
+        //如果 api35PlaceHolderOpen 为true，则是api35 键盘弹出时的占位符，即使键盘弹出也要显示
+        if (!api35PlaceHolderOpen && mKeyboardManager.isKeyboardShowing() && visibility == View.VISIBLE) {
             return true;
         }
 
@@ -106,6 +111,13 @@ public class IMEPanelLayout extends FrameLayout implements IPanelLayout {
 
     @Override
     public void openPanel() {
+        api35PlaceHolderOpen = false;
+        setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void openPanelApi35() {
+        api35PlaceHolderOpen = true;
         setVisibility(VISIBLE);
     }
 

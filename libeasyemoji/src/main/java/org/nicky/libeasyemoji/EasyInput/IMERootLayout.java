@@ -44,14 +44,20 @@ class IMERootLayout extends RelativeLayout{
         mContext = context;
         mKeyboardManager = keyboardManager;
         mWindow =  ((Activity)mContext).getWindow();
-        //设置activity输入法模式，必须要设置SOFT_INPUT_ADJUST_RESIZE
+        //设置activity输入法模式
+        // API 35+ 使用 ADJUST_NOTHING，配合WindowInsets API
+        // API < 35 使用传统的 ADJUST_RESIZE
+        int adjustMode;
+        if (android.os.Build.VERSION.SDK_INT >= 35) {
+            adjustMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
+        } else {
+            adjustMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+        }
 
         if(isKeyboardShow) {
-            mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                    | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            mWindow.setSoftInputMode(adjustMode | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }else {
-            mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                    | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            mWindow.setSoftInputMode(adjustMode | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
 
         mRootLayoutChangeHandler = new RootLayoutChangeHandler(this,panelManager,keyboardManager);

@@ -17,4 +17,6 @@ public interface IPanelLayout {
     boolean isVisible();
     void setHide();
     void handleShow();
+
+    void openPanelApi35();
 }

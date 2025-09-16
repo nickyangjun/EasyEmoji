@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import org.nicky.libeasyemoji.EasyInput.interfaces.IKeyboardManager;
 import org.nicky.libeasyemoji.EasyInput.interfaces.IPanelLayout;
 import org.nicky.libeasyemoji.EasyInput.interfaces.OnKeyboardListener;
@@ -30,7 +34,10 @@ public class KeyboardManagerImpl implements IKeyboardManager {
     private InputMethodManager mInputManager;
     private boolean mIsKeyboardShowing;
 
-    public KeyboardManagerImpl(Context context){
+    // API 35+ 支持
+    private boolean mIsApi35Mode = false;
+
+    public KeyboardManagerImpl(Context context) {
         mContext = context;
         mInputManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -47,7 +54,7 @@ public class KeyboardManagerImpl implements IKeyboardManager {
 
     @Override
     public void openKeyboard(View view) {
-        if(mInputManager != null) {
+        if (mInputManager != null) {
             view.setFocusableInTouchMode(true);
             view.requestFocus();
             mInputManager.showSoftInput(view, InputMethodManager.SHOW_FORCED);
@@ -56,7 +63,7 @@ public class KeyboardManagerImpl implements IKeyboardManager {
 
     @Override
     public void closeKeyboard(View view) {
-        if(mInputManager != null) {
+        if (mInputManager != null) {
             mInputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
@@ -68,7 +75,6 @@ public class KeyboardManagerImpl implements IKeyboardManager {
             focusView.clearFocus();
         }
     }
-
 
 
     private static int LAST_SAVE_KEYBOARD_HEIGHT = 0;
@@ -139,8 +145,16 @@ public class KeyboardManagerImpl implements IKeyboardManager {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @Override
     public ViewTreeObserver.OnGlobalLayoutListener attach(final Activity activity, IPanelLayout target,
-                                                                OnKeyboardListener listener) {
+                                                          OnKeyboardListener listener) {
         final ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
+
+        // 检查是否是 API 35+
+        if (Build.VERSION.SDK_INT >= 35) {
+            mIsApi35Mode = true;
+            setupApi35KeyboardDetection(activity, contentView, target, listener);
+        }
+
+        // 传统方式（API < 35 或作为备选方案）
         final boolean isFullScreen = ViewUtil.isFullScreen(activity);
         final boolean isTranslucentStatus = ViewUtil.isTranslucentStatus(activity);
         final boolean isFitSystemWindows = ViewUtil.isFitsSystemWindows(activity);
@@ -168,7 +182,7 @@ public class KeyboardManagerImpl implements IKeyboardManager {
         return globalLayoutListener;
     }
 
-    public  ViewTreeObserver.OnGlobalLayoutListener attach(final Activity activity, IPanelLayout target) {
+    public ViewTreeObserver.OnGlobalLayoutListener attach(final Activity activity, IPanelLayout target) {
         return attach(activity, target, null);
     }
 
@@ -185,7 +199,7 @@ public class KeyboardManagerImpl implements IKeyboardManager {
     }
 
 
-    private  class KeyboardStatusListener implements ViewTreeObserver.OnGlobalLayoutListener {
+    private class KeyboardStatusListener implements ViewTreeObserver.OnGlobalLayoutListener {
 
         private int previousDisplayHeight = 0;
         private final ViewGroup contentView;
@@ -287,7 +301,12 @@ public class KeyboardManagerImpl implements IKeyboardManager {
         }
 
         private int maxOverlayLayoutHeight;
+
         private void calculateKeyboardShowing(final int displayHeight) {
+            // API 35+ 使用新的检测方式，跳过传统检测
+            if (mIsApi35Mode) {
+                return;
+            }
 
             boolean isKeyboardShowing;
 
@@ -337,6 +356,116 @@ public class KeyboardManagerImpl implements IKeyboardManager {
 
         private Context getContext() {
             return contentView.getContext();
+        }
+    }
+
+    /**
+     * API 35+ 键盘检测和Panel同步机制
+     */
+    private void setupApi35KeyboardDetection(Activity activity, ViewGroup contentView, IPanelLayout target, OnKeyboardListener listener) {
+        ViewCompat.setOnApplyWindowInsetsListener(contentView, (v, insets) -> {
+            Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            int keyboardHeight = imeInsets.bottom;
+            boolean isKeyboardVisible = keyboardHeight > 0;
+
+            // 键盘状态发生变化
+            if (mIsKeyboardShowing != isKeyboardVisible) {
+                setKeyboardShowing(isKeyboardVisible);
+
+                if (isKeyboardVisible) {
+                    // 键盘弹出：显示Panel占位，被键盘遮挡
+                    showPanelPlaceholder(target, keyboardHeight);
+                } else {
+                    //键盘收起时，可能是手动点击了显示panel，不能隐藏Panel占位
+                    if(target.isVisible() && target.getPanel().api35PlaceHolderOpen == false){
+
+                    }else {
+                        // 键盘隐藏：隐藏Panel占位
+                        hidePanelPlaceholder(target);
+                    }
+                }
+
+                // 保存键盘高度
+                if (isKeyboardVisible && keyboardHeight > getMinKeyboardHeight(mContext)) {
+                    saveKeyboardHeight(mContext, keyboardHeight);
+                }
+
+                // 通知监听器
+                if (listener != null) {
+                    listener.onKeyboardDisplay(isKeyboardVisible);
+                }
+            }
+
+            return insets;
+        });
+    }
+
+    /**
+     * 显示Panel占位符（与键盘同高度，被键盘遮挡）
+     */
+    private void showPanelPlaceholder(IPanelLayout target, int keyboardHeight) {
+        if (target == null) {
+            return;
+        }
+
+        // 如果Panel已经在显示其他内容，只调整高度
+        if (target.isVisible()) {
+            target.changeHeight(keyboardHeight);
+            return;
+        }
+
+        // 设置Panel高度为键盘高度
+        target.changeHeight(keyboardHeight);
+
+        // 强制显示Panel（绕过键盘检查）
+        forcePanelShow(target);
+
+        // 隐藏Panel内容，使其变成透明占位符
+//        makePanelTransparent(target);
+    }
+
+    /**
+     * 隐藏Panel占位符
+     */
+    private void hidePanelPlaceholder(IPanelLayout target) {
+        if (target == null) {
+            return;
+        }
+
+        // 恢复Panel透明度
+//        restorePanelVisibility(target);
+
+        // 隐藏Panel
+        target.closePanel();
+    }
+
+    /**
+     * 使Panel变成透明占位符
+     */
+    private void makePanelTransparent(IPanelLayout target) {
+        if (target != null && target.getPanel() != null) {
+            View panelView = target.getPanel();
+            panelView.setAlpha(0.0f); // 完全透明
+        }
+    }
+
+    /**
+     * 恢复Panel可见性
+     */
+    private void restorePanelVisibility(IPanelLayout target) {
+        if (target != null && target.getPanel() != null) {
+            View panelView = target.getPanel();
+            panelView.setAlpha(1.0f); // 恢复不透明
+        }
+    }
+
+    /**
+     * 强制显示Panel（绕过IMEPanelLayout的键盘检查）
+     */
+    private void forcePanelShow(IPanelLayout target) {
+        if (target != null && target.getPanel() != null) {
+            // 现在可以正常显示Panel了
+            target.openPanelApi35();
         }
     }
 }
