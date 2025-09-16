@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -17,6 +15,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.nicky.easyemoji.fragments.AttachFragment;
 import org.nicky.easyemoji.lovedEmoji.LovedEmojiStyle;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         // Initialize views manually (ButterKnife removed)
         emojiconEditText = findViewById(R.id.emoji_input_txt);
         emojiSwitch = findViewById(R.id.emojicon_switch);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasPer = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-            if(hasPer != PackageManager.PERMISSION_GRANTED){
+            if (hasPer != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
             }
         }
@@ -93,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
         mEasyInputManager = EasyInputManagerImpl.newInstance(this);
         mEasyInputManager.addOnPanelListener(new changePanelListener());
         mEasyInputManager.addOnKeyboardIMEListener(new changeKeyboardListener());
-        mEasyInputManager.setTouchBlankAutoHideIME(true,dip2px(this, 50));
+        mEasyInputManager.setTouchBlankAutoHideIME(true, dip2px(this, 50));
         mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
-        mEasyInputManager.addDefaultEmoji("emoji",emojiconEditText);
+        mEasyInputManager.addDefaultEmoji("emoji", emojiconEditText);
         mEasyInputManager.getEmojiBuilder().addEmojiStyle(lovedEmoji);
 //        mEasyInputManager.getEmojiBuilder().setTabViewBackgroundColor(getResources().getColor(R.color.redE11644));
 //        mEasyInputManager.getEmojiBuilder().setTabViewDividerColor(getResources().getColor(R.color.redE11644));
@@ -103,80 +104,80 @@ public class MainActivity extends AppCompatActivity {
 //        mEasyInputManager.getEmojiBuilder().setIndicatorSelectedImageResource(R.drawable.shape_indicator_dot_selected);
 
 
-        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.leftMargin = 30;
         params.rightMargin = 30;
 
-        TextView view  = new TextView(this);
+        TextView view = new TextView(this);
         view.setGravity(Gravity.CENTER);
         view.setText("HAHA");
         view.setLayoutParams(params);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "HAHAHAHAH",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH", Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        RecyclerView.LayoutParams params2 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        RecyclerView.LayoutParams params2 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params2.leftMargin = 30;
         params2.rightMargin = 30;
 
-        TextView view2  = new TextView(this);
+        TextView view2 = new TextView(this);
         view2.setGravity(Gravity.CENTER);
         view2.setText("HAHA2");
         view2.setLayoutParams(params2);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view2, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "HAHAHAHAH22",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH22", Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        RecyclerView.LayoutParams params3 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        RecyclerView.LayoutParams params3 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params3.leftMargin = 130;
         params3.rightMargin = 130;
 
-        TextView view3  = new TextView(this);
+        TextView view3 = new TextView(this);
         view3.setGravity(Gravity.CENTER);
         view3.setText("HAHA3");
         view3.setLayoutParams(params3);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view3, true, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "HAHAHAHAH3",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH3", Toast.LENGTH_SHORT).show();
             }
         });
 
-        RecyclerView.LayoutParams params4 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        RecyclerView.LayoutParams params4 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params4.leftMargin = 130;
         params4.rightMargin = 130;
 
-        TextView view4  = new TextView(this);
+        TextView view4 = new TextView(this);
         view4.setGravity(Gravity.CENTER);
         view4.setText("HAHA4");
         view4.setLayoutParams(params4);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view4, true, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "HAHAHAHAH4",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH4", Toast.LENGTH_SHORT).show();
             }
         });
 
-        RecyclerView.LayoutParams params5 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        RecyclerView.LayoutParams params5 = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params5.leftMargin = 130;
         params5.rightMargin = 130;
 
-        TextView view5  = new TextView(this);
+        TextView view5 = new TextView(this);
         view5.setGravity(Gravity.CENTER);
         view5.setText("HAHA5");
         view5.setLayoutParams(params5);
         mEasyInputManager.getEmojiBuilder().addBottomTypeView(view5, true, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "HAHAHAHAH5",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "HAHAHAHAH5", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -188,9 +189,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>0){
+                if (s.length() > 0) {
                     publish.setBackground(getResources().getDrawable(R.drawable.shape_bg_blue_round_active));
-                }else {
+                } else {
                     publish.setBackground(getResources().getDrawable(R.drawable.shape_bg_grey_round));
                 }
             }
@@ -210,67 +211,55 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void attach(){
+    void attach() {
         mEasyInputManager.openPanel("attach");
         emojiSwitch.setChecked(false);
     }
 
-    void onClick(View view){
-        switch (view.getId()){
-            case R.id.open_dialog: // TODO: 2019/3/22  未实现
-//                MsgSendDialog dialog = new MsgSendDialog();
+    void onClick(View view) {
+        final int id = view.getId();
+        if (id == R.id.open_dialog) {
+            //                MsgSendDialog dialog = new MsgSendDialog();
 //                dialog.show(getSupportFragmentManager(), "dialog");
-                break;
-            case R.id.open_keyboard:
-                mEasyInputManager.openKeyboard(emojiconEditText);
-                break;
-            case R.id.open_panel:
-                mEasyInputManager.openPanel();
-                break;
-            case R.id.close_keyboard:
-                mEasyInputManager.closeKeyboard(emojiconEditText);
-                break;
-            case R.id.close_panel:
-                mEasyInputManager.closePanel();
-                break;
-            case R.id.add_emoji:
-                mEasyInputManager.getEmojiBuilder().addEmojiStyle(category);
-                break;
-            case R.id.delete_emoji:
-                mEasyInputManager.getEmojiBuilder().deleteEmojiStyle(category.getStyleName());
-                break;
-            case R.id.add_a_emoji:
-                category.getEmojiData().add(Emojicon.fromCodePoint(0x1f3e0));
+        } else if (id == R.id.open_keyboard) {
+            mEasyInputManager.openKeyboard(emojiconEditText);
+        } else if (id == R.id.open_panel) {
+            mEasyInputManager.openPanel();
+        } else if (id == R.id.close_keyboard) {
+            mEasyInputManager.closeKeyboard(emojiconEditText);
+        } else if (id == R.id.close_panel) {
+            mEasyInputManager.closePanel();
+        } else if (id == R.id.add_emoji) {
+            mEasyInputManager.getEmojiBuilder().addEmojiStyle(category);
+        } else if (id == R.id.delete_emoji) {
+            mEasyInputManager.getEmojiBuilder().deleteEmojiStyle(category.getStyleName());
+        } else if (id == R.id.add_a_emoji) {
+            category.getEmojiData().add(Emojicon.fromCodePoint(0x1f3e0));
+            mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
+        } else if (id == R.id.delete_a_emoji) {
+            if (category.getEmojiData().size() > 0) {
+                category.getEmojiData().remove(category.getEmojiData().size() - 1);
                 mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
-                break;
-            case R.id.delete_a_emoji:
-                if(category.getEmojiData().size()>0) {
-                    category.getEmojiData().remove(category.getEmojiData().size() - 1);
-                    mEasyInputManager.getEmojiBuilder().updateEmojiStyle(category);
-                }
-                break;
-            case R.id.publish:
-                txt.setText(emojiconEditText.getText());
-                break;
-            case R.id.add_panel:
-                mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
-                break;
-            case R.id.delete_panel:
-                mEasyInputManager.removeFragmentToPanel("attach");
-                break;
+            }
+        } else if (id == R.id.publish) {
+            txt.setText(emojiconEditText.getText());
+        } else if (id == R.id.add_panel) {
+            mEasyInputManager.addFragmentToPanel("attach", AttachFragment.newInstance());
+        } else if (id == R.id.delete_panel) {
+            mEasyInputManager.removeFragmentToPanel("attach");
         }
+
     }
 
     private class changePanelListener implements OnPanelListener {
         @Override
         public void onPanelDisplay(boolean isShowing) {
-            if(mEasyInputManager.getCurrentPanelDisplayTag().equals("attach")){
+            if (mEasyInputManager.getCurrentPanelDisplayTag().equals("attach")) {
                 return;
             }
-            if(isShowing){
+            if (isShowing) {
                 emojiSwitch.setChecked(true);
-            }
-            else {
+            } else {
                 emojiSwitch.setChecked(false);
             }
         }
@@ -281,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onKeyboardDisplay(boolean isShowing) {
-            if(isShowing){
+            if (isShowing) {
                 emojiSwitch.setChecked(false);
             }
         }
@@ -293,6 +282,6 @@ public class MainActivity extends AppCompatActivity {
         //dp和px的转换关系
         float density = context.getResources().getDisplayMetrics().density;
         //2*1.5+0.5  2*0.75 = 1.5+0.5
-        return (int)(dp*density+0.5);
+        return (int) (dp * density + 0.5);
     }
 }

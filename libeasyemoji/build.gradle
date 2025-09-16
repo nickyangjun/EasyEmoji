@@ -44,7 +44,15 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
+                // 使用 Android 组件
+                if (components.hasProperty('release')) {
+                    from components.release
+                } else if (components.hasProperty('android')) {
+                    from components.android
+                } else {
+                    // 手动添加 artifacts
+                    artifact bundleReleaseAar
+                }
                 groupId = 'com.github.nickyangjun'
                 artifactId = 'EasyEmoji'
                 version = '1.0'
